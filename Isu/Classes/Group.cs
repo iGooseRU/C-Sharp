@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Isu.Tools;
 
 namespace Isu.Classes
@@ -6,6 +7,8 @@ namespace Isu.Classes
     public class Group
     {
         public const int StudentLimit = 25;
+        private const char _EducationalDirection = 'M';
+        private const char _LevelOfPreparation = '3';
         public Group(string name)
         {
             if (!CheckNameGroup(name))
@@ -13,7 +16,7 @@ namespace Isu.Classes
 
             GroupName = name;
             Students = new List<Student>();
-            Course = new CourseNumber(name[2]);
+            Course = new CourseNumber(Convert.ToInt32(name[2]));
         }
 
         public string GroupName { get; }
@@ -22,12 +25,24 @@ namespace Isu.Classes
 
         public bool CheckStudentCount()
         {
-            return Students.Count + 1 <= StudentLimit;
+            return Students.Count == StudentLimit;
+        }
+
+        public Student AddPerson(Student student)
+        {
+            Students.Add(student);
+            return null;
+        }
+
+        public Student RemovePerson(Student student)
+        {
+            Students.Remove(student);
+            return null;
         }
 
         private static bool CheckNameGroup(string name)
         {
-            return (name[0] == 'M' && name[1] == '3') && (name[2] >= '1' && name[2] <= '4');
+            return name[0] == _EducationalDirection && name[1] == _LevelOfPreparation;
         }
     }
 }

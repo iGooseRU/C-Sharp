@@ -26,10 +26,10 @@ namespace Isu.Classes
         {
             var student = new Student(name, ++studentID);
 
-            if (!group.CheckStudentCount())
+            if (group.CheckStudentCount())
                 throw new IsuException("Group has max number of students");
 
-            group.Students.Add(student);
+            group.AddPerson(student);
             return student;
         }
 
@@ -37,16 +37,16 @@ namespace Isu.Classes
         {
             Student movingStudent = FindStudent(student.Name);
 
-            if (!newGroup.CheckStudentCount())
+            if (newGroup.CheckStudentCount())
                 throw new IsuException("Group has max number of students");
 
-            newGroup.Students.Add(movingStudent);
+            newGroup.AddPerson(movingStudent);
 
             foreach (Group group in Groups)
             {
                 if ((group.GroupName != newGroup.GroupName) && (group.Students.Find(student => student.Name == movingStudent.Name) != null))
                 {
-                    group.Students.Remove(student);
+                    group.RemovePerson(student);
                     break;
                 }
             }
