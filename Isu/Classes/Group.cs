@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Isu.Tools;
 
 namespace Isu.Classes
 {
     public class Group
     {
-        public const int StudentLimit = 25;
-        private const char _EducationalDirection = 'M';
-        private const char _LevelOfPreparation = '3';
+        private const int StudentLimit = 25;
+        private const char EducationalDirection = 'M';
+        private const char LevelOfPreparation = '3';
+
         public Group(string name)
         {
             if (!CheckNameGroup(name))
+            {
                 throw new IsuException("Incorrect group name");
+            }
 
+            int cnt = ConverterCourseToInt(name); // to take a course (int) from string name
             GroupName = name;
             Students = new List<Student>();
-            Course = new CourseNumber(Convert.ToInt32(name[2]));
+            Course = new CourseNumber(cnt);
         }
 
         public string GroupName { get; }
@@ -42,7 +45,13 @@ namespace Isu.Classes
 
         private static bool CheckNameGroup(string name)
         {
-            return name[0] == _EducationalDirection && name[1] == _LevelOfPreparation;
+            return name[0] == EducationalDirection && name[1] == LevelOfPreparation;
+        }
+
+        private int ConverterCourseToInt(string name)
+        {
+            int x = name[2] - '0';
+            return x;
         }
     }
 }
