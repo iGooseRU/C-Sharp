@@ -26,9 +26,6 @@ namespace Isu.Classes
         {
             var student = new Student(name, ++studentID);
 
-            if (group.CheckStudentCount())
-                throw new IsuException("Group has max number of students");
-
             group.AddPerson(student);
             return student;
         }
@@ -36,9 +33,6 @@ namespace Isu.Classes
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
             Student movingStudent = FindStudent(student.Name);
-
-            if (newGroup.CheckStudentCount())
-                throw new IsuException("Group has max number of students");
 
             newGroup.AddPerson(movingStudent);
 

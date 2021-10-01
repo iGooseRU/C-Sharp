@@ -16,9 +16,14 @@ namespace Isu.Classes
                 throw new IsuException("Incorrect group name");
             }
 
+            Students = new List<Student>();
+            if (!ValidStudentCount())
+            {
+                throw new IsuException("Group has max number of students");
+            }
+
             int cnt = ConverterCourseToInt(name); // to take a course (int) from string name
             GroupName = name;
-            Students = new List<Student>();
             Course = new CourseNumber(cnt);
         }
 
@@ -26,9 +31,9 @@ namespace Isu.Classes
         public List<Student> Students { get; }
         public CourseNumber Course { get; }
 
-        public bool CheckStudentCount()
+        public bool ValidStudentCount()
         {
-            return Students.Count == StudentLimit;
+            return Students.Count < StudentLimit;
         }
 
         public Student AddPerson(Student student)
