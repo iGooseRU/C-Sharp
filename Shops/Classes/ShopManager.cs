@@ -95,9 +95,11 @@ namespace Shops.Classes
 
                 if (productToBuyAmount < foundProduct.ProductAmount)
                 {
-                    if (foundProduct.ProductPrice >= maxProductPrice) continue;
-                    maxProductPrice = foundProduct.ProductPrice;
-                    shopWithCheapestPrice = shop;
+                    if (foundProduct.ProductPrice < maxProductPrice)
+                    {
+                        maxProductPrice = foundProduct.ProductPrice;
+                        shopWithCheapestPrice = shop;
+                    }
                 }
                 else
                 {

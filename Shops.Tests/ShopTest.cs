@@ -77,9 +77,9 @@ namespace Shops.Tests
             var testCustomer = new Customer("Egor", moneyBeforeBuying);
             ProductAttributes buyingProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
             _shopManager.BuyProduct(testShop,testProduct,testCustomer,productToBuyAmount);
-            Assert.AreEqual(testCustomer.AmountOfMoney, moneyBeforeBuying - buyingProduct.ProductPrice * productToBuyAmount); // check amount of money
-            Assert.AreEqual(buyingProduct.ProductAmount, amountOfProductsBeforeBuying - productToBuyAmount); // check amount of product in the shop
+            Assert.AreEqual(testCustomer.AmountOfMoney, moneyBeforeBuying - buyingProduct.ProductPrice * productToBuyAmount);   // check amount of money
+            Assert.AreEqual(buyingProduct.ProductAmount, amountOfProductsBeforeBuying - productToBuyAmount);                    // check amount of product in the shop
         }
-
+        
     }
 }
