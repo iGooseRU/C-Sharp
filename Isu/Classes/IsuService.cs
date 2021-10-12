@@ -24,6 +24,11 @@ namespace Isu.Classes
 
         public Student AddStudent(Group group, string name)
         {
+            if (!group.ValidStudentCount())
+            {
+                throw new IsuException("Group has max number of students");
+            }
+
             var student = new Student(name, ++studentID);
 
             group.AddPerson(student);
