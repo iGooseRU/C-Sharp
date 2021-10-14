@@ -16,7 +16,7 @@ namespace Shops.Tests
         [Test]
         public void CreateShopAddProductToSystemTransferProductFromSystemToShopTest()
         {
-            Shop testShop = _shopManager.AddShop("Dixy", 123, "Kronversky 23");
+            Shop testShop = _shopManager.AddShop("Dixy", "Kronversky 23");
             Product testProduct = _shopManager.RegisterProduct("Coca-Cola");
             _shopManager.AddProductToShop(testShop, testProduct, 55, 20);
             ProductAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
@@ -28,7 +28,7 @@ namespace Shops.Tests
         {
             const int amountOfProducts = 120;
             const int newPrice = 45;
-            Shop testShop = _shopManager.AddShop("Dixy", 123, "Kronversky 23");
+            Shop testShop = _shopManager.AddShop("Dixy", "Kronversky 23");
             Product testProduct = _shopManager.RegisterProduct("Twix");
             _shopManager.AddProductToShop(testShop,testProduct,40,amountOfProducts);
             _shopManager.ChangeProductPrice(testShop,testProduct,newPrice);
@@ -42,7 +42,7 @@ namespace Shops.Tests
             const int moneyBeforeBuying = 150;
             const int amountOfProducts = 120;
             const int productToBuyCount = 1;
-            Shop testShop = _shopManager.AddShop("Dixy", 123, "Kronversky 23");
+            Shop testShop = _shopManager.AddShop("Dixy", "Kronversky 23");
             Product testProduct = _shopManager.RegisterProduct("Twix");
             _shopManager.AddProductToShop(testShop,testProduct,40,amountOfProducts);
             var testCustomer = new Customer("Egor", moneyBeforeBuying);
@@ -53,9 +53,9 @@ namespace Shops.Tests
         [Test]
         public void FindShopWithCheapestPriceForALotTest()
         {
-            Shop shop1 = _shopManager.AddShop("FamilyShop", 001, "Veteranov 125");
-            Shop shop2 = _shopManager.AddShop("Dixy", 002, "Leninsky 31");
-            Shop shop3 = _shopManager.AddShop("GroceryShop", 003, "Kronversky 23");
+            Shop shop1 = _shopManager.AddShop("FamilyShop", "Leninsky 11");
+            Shop shop2 = _shopManager.AddShop("Dixy", "Kronversky 23");
+            Shop shop3 = _shopManager.AddShop("GroceryShop", "Nevsky 44");
             Product testProduct = _shopManager.RegisterProduct("Sprite");
             _shopManager.AddProductToShop(shop1,testProduct,100,100);
             _shopManager.AddProductToShop(shop2,testProduct,120,100);
@@ -71,7 +71,7 @@ namespace Shops.Tests
             const int moneyBeforeBuying = 10000;
             const int amountOfProductsBeforeBuying = 120;
             const int productToBuyAmount = 100;
-            Shop testShop = _shopManager.AddShop("Dixy", 123, "Kronversky 23");
+            Shop testShop = _shopManager.AddShop("Dixy", "Kronversky 23");
             Product testProduct = _shopManager.RegisterProduct("Twix");
             _shopManager.AddProductToShop(testShop,testProduct,40,amountOfProductsBeforeBuying);
             var testCustomer = new Customer("Egor", moneyBeforeBuying);
