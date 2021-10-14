@@ -6,7 +6,8 @@ namespace Shops.Classes
 {
     public class ShopManager : IShopManager
     {
-        private int _vendorCode = 100000;
+        private int _productId = 100000;
+        private int _shopId = 100000;
         public ShopManager()
         {
             Shops = new List<Shop>();
@@ -18,14 +19,14 @@ namespace Shops.Classes
 
         public Product RegisterProduct(string productName)
         {
-            var product = new Product(productName, ++_vendorCode);
+            var product = new Product(productName, ++_productId);
             RegisteredProduct.Add(product);
             return product;
         }
 
-        public Shop AddShop(string shopName, int id, string address)
+        public Shop AddShop(string shopName, string address)
         {
-            var shop = new Shop(shopName, id, address);
+            var shop = new Shop(shopName, ++_shopId, address);
             Shops.Add(shop);
 
             return shop;
@@ -65,10 +66,11 @@ namespace Shops.Classes
 
             if (productToBuyAmount < productOnSale.ProductAmount)
             {
-                if (productOnSale.ProductPrice * productToBuyAmount < customer.AmountOfMoney)
+                int finalPrice = productOnSale.ProductPrice * productToBuyAmount;
+                if (finalPrice <= customer.AmountOfMoney)
                 {
                     productOnSale.ProductAmount -= productToBuyAmount;
-                    customer.AmountOfMoney -= productOnSale.ProductPrice * productToBuyAmount;
+                    customer.AmountOfMoney -= finalPrice;
                 }
                 else
                 {

@@ -8,13 +8,14 @@ namespace Shops.Classes
         {
             ShopName = shopName;
             Id = id;
-            Address = address;
+            Address = new ShopAddress(address);
             Products = new List<(Product, ProductAttributes)>();
         }
 
         public string ShopName { get; }
         public int Id { get; }
-        public string Address { get; }
+        public ShopAddress Address { get; }
+
         public List<(Product, ProductAttributes)> Products { get; }
 
         public void AddProduct(Product product, int productPrice, int productCount)
