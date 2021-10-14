@@ -4,7 +4,7 @@ namespace Shops.Manager
 {
     public interface IShopManager
     {
-        public Shop AddShop(string shopName, int id, string address);
+        public Shop AddShop(string shopName, string address);
         public Product RegisterProduct(string productName);
         public void AddProductToShop(Shop shop, Product product, int productPrice, int productAmount);
         public void ChangeProductPrice(Shop shop, Product product, int newPrice);
