@@ -7,15 +7,12 @@ namespace Shops.Classes
         public Shop(string shopName, int id, string address)
         {
             ShopName = shopName;
-            Id = id;
-            Address = new ShopAddress(address);
+            ShopAttributes = new ShopAttributes(id, address);
             Products = new List<(Product, ProductAttributes)>();
         }
 
         public string ShopName { get; }
-        public int Id { get; }
-        public ShopAddress Address { get; }
-
+        public ShopAttributes ShopAttributes { get; }
         public List<(Product, ProductAttributes)> Products { get; }
 
         public void AddProduct(Product product, int productPrice, int productCount)
