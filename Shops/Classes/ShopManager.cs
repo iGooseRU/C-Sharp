@@ -39,17 +39,17 @@ namespace Shops.Classes
 
         public void ChangeProductPrice(Shop shop, Product product, int newPrice)
         {
-            ProductAttributes changingPriceProduct = FindProductAttributes(product.ProductName, shop);
+            ProductWithAttributes changingPriceProduct = FindProductAttributes(product.ProductName, shop);
             changingPriceProduct.ProductPrice = newPrice;
         }
 
-        public ProductAttributes FindProductAttributes(string name, Shop shop)
+        public ProductWithAttributes FindProductAttributes(string name, Shop shop)
         {
-            foreach ((Product product, ProductAttributes foundProduct) in shop.Products)
+            foreach (ProductWithAttributes product in shop.Products)
             {
                 if (product.ProductName == name)
                 {
-                    return foundProduct;
+                    return product;
                 }
             }
 
@@ -58,7 +58,7 @@ namespace Shops.Classes
 
         public void BuyProduct(Shop shopName, Product product, Customer customer, int productToBuyAmount)
         {
-            ProductAttributes productOnSale = FindProductAttributes(product.ProductName, shopName);
+            ProductWithAttributes productOnSale = FindProductAttributes(product.ProductName, shopName);
             if (productOnSale == null)
             {
                 throw new ShopException("This product does not exist");
@@ -89,7 +89,7 @@ namespace Shops.Classes
             Shop shopWithCheapestPrice = null;
             foreach (Shop shop in Shops)
             {
-                ProductAttributes foundProduct = FindProductAttributes(product.ProductName, shop);
+                ProductWithAttributes foundProduct = FindProductAttributes(product.ProductName, shop);
                 if (foundProduct == null)
                 {
                     throw new ShopException("This product does not exist");

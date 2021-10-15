@@ -8,17 +8,18 @@ namespace Shops.Classes
         {
             ShopName = shopName;
             ShopAttributes = new ShopAttributes(id, address);
-            Products = new List<(Product, ProductAttributes)>();
+            Products = new List<ProductWithAttributes>();
         }
 
         public string ShopName { get; }
         public ShopAttributes ShopAttributes { get; }
-        public List<(Product, ProductAttributes)> Products { get; }
+        public List<ProductWithAttributes> Products { get; }
 
         public void AddProduct(Product product, int productPrice, int productCount)
         {
             var productAttributes = new ProductAttributes(productPrice, productCount);
-            Products.Add((product, productAttributes));
+            var productWithAttributes = new ProductWithAttributes(product, productAttributes);
+            Products.Add(productWithAttributes);
         }
     }
 }
