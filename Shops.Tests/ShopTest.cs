@@ -19,7 +19,7 @@ namespace Shops.Tests
             Shop testShop = _shopManager.AddShop("Dixy", "Kronversky 23");
             Product testProduct = _shopManager.RegisterProduct("Coca-Cola");
             _shopManager.AddProductToShop(testShop, testProduct, 55, 20);
-            ProductAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
+            ProductWithAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
             Assert.AreEqual(foundProduct.ProductAmount, 20);
         }
 
@@ -32,7 +32,7 @@ namespace Shops.Tests
             Product testProduct = _shopManager.RegisterProduct("Twix");
             _shopManager.AddProductToShop(testShop,testProduct,40,amountOfProducts);
             _shopManager.ChangeProductPrice(testShop,testProduct,newPrice);
-            ProductAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
+            ProductWithAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
             Assert.AreEqual(foundProduct.ProductPrice, newPrice);
         }
 
@@ -61,7 +61,7 @@ namespace Shops.Tests
             _shopManager.AddProductToShop(shop2,testProduct,120,100);
             _shopManager.AddProductToShop(shop3,testProduct,90,100);
             Shop foundShop = _shopManager.FindShopWithCheapestPriceForLot(testProduct, 10);
-            ProductAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, foundShop);
+            ProductWithAttributes foundProduct = _shopManager.FindProductAttributes(testProduct.ProductName, foundShop);
             Assert.AreEqual(foundProduct.ProductPrice, 90);
         }
 
@@ -75,7 +75,7 @@ namespace Shops.Tests
             Product testProduct = _shopManager.RegisterProduct("Twix");
             _shopManager.AddProductToShop(testShop,testProduct,40,amountOfProductsBeforeBuying);
             var testCustomer = new Customer("Egor", moneyBeforeBuying);
-            ProductAttributes buyingProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
+            ProductWithAttributes buyingProduct = _shopManager.FindProductAttributes(testProduct.ProductName, testShop);
             _shopManager.BuyProduct(testShop,testProduct,testCustomer,productToBuyAmount);
             Assert.AreEqual(testCustomer.AmountOfMoney, moneyBeforeBuying - buyingProduct.ProductPrice * productToBuyAmount);   // check amount of money
             Assert.AreEqual(buyingProduct.ProductAmount, amountOfProductsBeforeBuying - productToBuyAmount);                    // check amount of product in the shop
