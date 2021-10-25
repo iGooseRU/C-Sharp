@@ -6,7 +6,6 @@ namespace Isu.Classes
     public class Group
     {
         private const int StudentLimit = 25;
-        private const char EducationalDirection = 'M';
         private const char LevelOfPreparation = '3';
 
         public Group(string name)
@@ -50,7 +49,7 @@ namespace Isu.Classes
 
         private static bool CheckNameGroup(string name)
         {
-            return name[0] == EducationalDirection && name[1] == LevelOfPreparation;
+            return name[1] == LevelOfPreparation;
         }
 
         private int ConverterCourseToInt(string name)
