@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Isu.Classes;
 using Isu.Tools;
-using IsuExtra.Services;
 
 namespace IsuExtra.Classes
 {
@@ -29,7 +27,7 @@ namespace IsuExtra.Classes
         {
             if (ValidMegaFacultyCount())
             {
-                MegaFaculty megaFaculty = new MegaFaculty(megaFacultyName, facultyLetter);
+                var megaFaculty = new MegaFaculty(megaFacultyName, facultyLetter);
                 MegaFaculties.Add(megaFaculty);
                 return megaFaculty;
             }
