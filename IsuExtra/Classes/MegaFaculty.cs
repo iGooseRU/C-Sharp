@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Isu.Classes;
 
 namespace IsuExtra.Classes
 {

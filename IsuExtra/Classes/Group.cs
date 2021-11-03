@@ -14,11 +14,6 @@ namespace IsuExtra.Classes
         {
             GroupSchedule = new Schedule();
 
-            if (!ValidStudentCount())
-            {
-                throw new IsuException("Group has max number of students");
-            }
-
             EStudents = new List<ExtraStudent>();
         }
 
@@ -46,11 +41,6 @@ namespace IsuExtra.Classes
         public void RemovePerson(ExtraStudent student)
         {
             EStudents.Remove(student);
-        }
-
-        public bool ValidEStudentCount()
-        {
-            return EStudents.Count < StudentLimit;
         }
 
         public ExtraStudent CreateAndAddStudentToGroup(string name)

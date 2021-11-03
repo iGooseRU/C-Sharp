@@ -6,6 +6,7 @@ namespace IsuExtra.Classes
 {
     public class IsuExtraService : IsuService
     {
+        private const short MegaFacultiesLimit = 5;
         public IsuExtraService()
         {
             MegaFaculties = new List<MegaFaculty>();
@@ -15,7 +16,7 @@ namespace IsuExtra.Classes
 
         public bool ValidMegaFacultyCount()
         {
-            if (MegaFaculties.Count > 5)
+            if (MegaFaculties.Count > MegaFacultiesLimit)
             {
                 throw new IsuException("You can add only 5 mega faculties");
             }

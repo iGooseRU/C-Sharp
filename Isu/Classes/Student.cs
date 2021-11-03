@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Isu.Classes
+﻿namespace Isu.Classes
 {
     public class Student
     {

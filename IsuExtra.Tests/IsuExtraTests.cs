@@ -136,6 +136,7 @@ namespace IsuExtra.Tests
             firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
             firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
             firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
+            ExtraStudent testStudent = firstGroup.CreateAndAddStudentToGroup("StudentWithExtraCourse");
 
             // Adding lessons to group and to flow
             firstGroup.CreateGroupLessonAndAddToSchedule("SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
@@ -143,6 +144,7 @@ namespace IsuExtra.Tests
             firstAcademicFlowOnFirstExtraCourse.CreateExtraLessonAndAddToSchedule("SomeExtraLessonName",
                 LessonNums.First,
                 DayOfWeek.Monday, "name", 395);
+            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(testStudent);
 
             Assert.AreEqual(3, firstFaculty.GetListOfStudentsWithoutExtraCourse().Count);
         }
