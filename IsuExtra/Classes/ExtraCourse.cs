@@ -13,18 +13,5 @@ namespace IsuExtra.Classes
 
         public string ExtraCourseName { get; }
         public List<AcademicFlow> AcademicFlows { get; }
-
-        public AcademicFlow AddAcademicFlowToExtraCourse(string academicFlowName, ExtraCourse extraCourse)
-        {
-            var academicFlow = new AcademicFlow(academicFlowName, extraCourse);
-            AcademicFlows.Add(academicFlow);
-
-            return academicFlow;
-        }
-
-        public List<AcademicFlow> GetAcademicFlows()
-        {
-            return AcademicFlows;
-        }
     }
 }

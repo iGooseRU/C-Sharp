@@ -19,9 +19,9 @@ namespace IsuExtra.Tests
         public void CreateExtraCourse_AddFlowTest()
         {
             MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-            ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("SomeCourseName");
+            ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("SomeCourseName", firstFaculty);
             AcademicFlow firstAcademicFlowOnFirstExtraCourse =
-                firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+                _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
             Assert.Contains(firstAcademicFlowOnFirstExtraCourse, firstExtraCourse.AcademicFlows);
         }
 
@@ -32,23 +32,23 @@ namespace IsuExtra.Tests
             {
                 // Creating extra course
                 MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-                ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName");
+                ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName", firstFaculty);
                 AcademicFlow firstAcademicFlowOnFirstExtraCourse =
-                    firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+                    _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
 
                 // Creating student
-                Group firstGroup = firstFaculty.AddGroup("M3210");
-                ExtraStudent firstStudent = firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
+                Group firstGroup = _isuExtraService.AddGroup("M3210", firstFaculty);
+                ExtraStudent firstStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
 
                 // Adding lessons to group and to flow
-                firstGroup.CreateGroupLessonAndAddToSchedule("SomeLessonName", LessonNums.First, DayOfWeek.Monday, "name",
+                _isuExtraService.CreateGroupLessonAndAddToSchedule(firstGroup,"SomeLessonName", LessonNums.First, DayOfWeek.Monday, "name",
                     395);
-                firstAcademicFlowOnFirstExtraCourse.CreateExtraLessonAndAddToSchedule("SomeExtraLessonName",
+                _isuExtraService.CreateExtraLessonAndAddToSchedule(firstAcademicFlowOnFirstExtraCourse,"SomeExtraLessonName",
                     LessonNums.First,
                     DayOfWeek.Monday, "name", 395);
 
                 // Adding student to extra course
-                firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(firstStudent);
+                _isuExtraService.AddStudentToAcademicFlow(firstStudent, firstAcademicFlowOnFirstExtraCourse);
             });
         }
 
@@ -58,24 +58,24 @@ namespace IsuExtra.Tests
         {
             // Creating extra course
             MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-            ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName");
+            ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName", firstFaculty);
             AcademicFlow firstAcademicFlowOnFirstExtraCourse =
-                firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+                _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
 
             // Creating student
-            Group firstGroup = firstFaculty.AddGroup("M3210");
-            ExtraStudent firstStudent = firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
+            Group firstGroup = _isuExtraService.AddGroup("M3210", firstFaculty);
+            ExtraStudent firstStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
             
             // Adding lessons to group and to flow
-            firstGroup.CreateGroupLessonAndAddToSchedule("SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
+            _isuExtraService.CreateGroupLessonAndAddToSchedule(firstGroup, "SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
                 395);
-            firstAcademicFlowOnFirstExtraCourse.CreateExtraLessonAndAddToSchedule("SomeExtraLessonName",
+            _isuExtraService.CreateExtraLessonAndAddToSchedule(firstAcademicFlowOnFirstExtraCourse,"SomeExtraLessonName",
                 LessonNums.First,
                 DayOfWeek.Monday, "name", 395);
             
             // Adding student to extra course
-            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(firstStudent);
-            firstAcademicFlowOnFirstExtraCourse.RemoveStudentFromAcademicFlow(firstStudent);
+            _isuExtraService.AddStudentToAcademicFlow(firstStudent, firstAcademicFlowOnFirstExtraCourse);
+            _isuExtraService.RemoveStudentFromAcademicFlow(firstStudent, firstAcademicFlowOnFirstExtraCourse);
             Assert.AreEqual(0, firstAcademicFlowOnFirstExtraCourse.StudentsOnFlow.Count);
         }
 
@@ -84,12 +84,12 @@ namespace IsuExtra.Tests
         {
             // Creating extra course
             MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-            ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName");
-            firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
-            firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
-            firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+            ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName", firstFaculty);
+            _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+            _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+            _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
 
-            Assert.AreEqual(3, firstExtraCourse.GetAcademicFlows().Count);
+            Assert.AreEqual(3, _isuExtraService.GetAcademicFlows(firstExtraCourse).Count);
         }
 
         [Test]
@@ -97,27 +97,27 @@ namespace IsuExtra.Tests
         {
             // Creating extra course
             MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-            ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName");
+            ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName",firstFaculty);
             AcademicFlow firstAcademicFlowOnFirstExtraCourse =
-                firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+                _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
 
             // Creating student
-            Group firstGroup = firstFaculty.AddGroup("M3210");
-            ExtraStudent firstStudent = firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
-            ExtraStudent secondStudent = firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
-            ExtraStudent thirdStudent = firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
+            Group firstGroup = _isuExtraService.AddGroup("M3210", firstFaculty);
+            ExtraStudent firstStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
+            ExtraStudent secondStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
+            ExtraStudent thirdStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
 
             // Adding lessons to group and to flow
-            firstGroup.CreateGroupLessonAndAddToSchedule("SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
+            _isuExtraService.CreateGroupLessonAndAddToSchedule(firstGroup,"SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
                 395);
-            firstAcademicFlowOnFirstExtraCourse.CreateExtraLessonAndAddToSchedule("SomeExtraLessonName",
+            _isuExtraService.CreateExtraLessonAndAddToSchedule(firstAcademicFlowOnFirstExtraCourse,"SomeExtraLessonName",
                 LessonNums.First,
                 DayOfWeek.Monday, "name", 395);
 
             // Adding student to extra course
-            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(firstStudent);
-            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(secondStudent);
-            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(thirdStudent);
+            _isuExtraService.AddStudentToAcademicFlow(firstStudent, firstAcademicFlowOnFirstExtraCourse);
+            _isuExtraService.AddStudentToAcademicFlow(secondStudent, firstAcademicFlowOnFirstExtraCourse);
+            _isuExtraService.AddStudentToAcademicFlow(thirdStudent, firstAcademicFlowOnFirstExtraCourse);
 
             Assert.AreEqual(3, firstAcademicFlowOnFirstExtraCourse.StudentsOnFlow.Count);
         }
@@ -127,26 +127,26 @@ namespace IsuExtra.Tests
         {
             // Creating extra course
             MegaFaculty firstFaculty = _isuExtraService.AddMegaFaculty("ТИнТ", 'M');
-            ExtraCourse firstExtraCourse = firstFaculty.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName");
+            ExtraCourse firstExtraCourse = _isuExtraService.CreateAndAddExtraCourseToMegaFaculty("ExtraCourseName", firstFaculty);
             AcademicFlow firstAcademicFlowOnFirstExtraCourse =
-                firstExtraCourse.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
+                _isuExtraService.AddAcademicFlowToExtraCourse("SomeFlowName", firstExtraCourse);
 
             // Creating student
-            Group firstGroup = firstFaculty.AddGroup("M3210");
-            firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
-            firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
-            firstGroup.CreateAndAddStudentToGroup("Egor Guskov");
-            ExtraStudent testStudent = firstGroup.CreateAndAddStudentToGroup("StudentWithExtraCourse");
+            Group firstGroup = _isuExtraService.AddGroup("M3210", firstFaculty);
+            ExtraStudent firstStudent = _isuExtraService.CreateAndAddStudentToGroup("Egor Guskov", firstGroup);
+            ExtraStudent secondStudent = _isuExtraService.CreateAndAddStudentToGroup("SomeStudentName", firstGroup);
+            ExtraStudent thirdStudent = _isuExtraService.CreateAndAddStudentToGroup("AnotherStudentName", firstGroup);
+            ExtraStudent testStudent = _isuExtraService.CreateAndAddStudentToGroup("AnotherStudentName", firstGroup); // Student with extra course
 
             // Adding lessons to group and to flow
-            firstGroup.CreateGroupLessonAndAddToSchedule("SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
+            _isuExtraService.CreateGroupLessonAndAddToSchedule(firstGroup,"SomeLessonName", LessonNums.Second, DayOfWeek.Monday, "name",
                 395);
-            firstAcademicFlowOnFirstExtraCourse.CreateExtraLessonAndAddToSchedule("SomeExtraLessonName",
+            _isuExtraService.CreateExtraLessonAndAddToSchedule(firstAcademicFlowOnFirstExtraCourse,"SomeExtraLessonName",
                 LessonNums.First,
                 DayOfWeek.Monday, "name", 395);
-            firstAcademicFlowOnFirstExtraCourse.AddStudentToAcademicFlow(testStudent);
+            _isuExtraService.AddStudentToAcademicFlow(testStudent, firstAcademicFlowOnFirstExtraCourse);
 
-            Assert.AreEqual(3, firstFaculty.GetListOfStudentsWithoutExtraCourse().Count);
+            Assert.AreEqual(3, _isuExtraService.GetListOfStudentsWithoutExtraCourse(firstFaculty).Count);
         }
         
         

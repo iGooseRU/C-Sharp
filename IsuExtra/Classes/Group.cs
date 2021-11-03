@@ -4,34 +4,25 @@ using Isu.Tools;
 
 namespace IsuExtra.Classes
 {
-    public class Group : Isu.Classes.Group
+    public class Group
     {
         private const int StudentLimit = 25;
-        private int _studentId = 100000;
-
-        public Group(string name)
-            : base(name)
+        private const int NumberOfPreparation = 3;
+        public Group(string groupName)
         {
-            GroupSchedule = new Schedule();
+            CheckGroupName(groupName);
 
+            GroupName = groupName;
+            MegaFacultyLetter = groupName[0];
+
+            GroupSchedule = new Schedule();
             EStudents = new List<ExtraStudent>();
         }
 
+        public string GroupName { get; }
+        public char MegaFacultyLetter { get; }
         public Schedule GroupSchedule { get; }
         public List<ExtraStudent> EStudents { get; }
-
-        public Lesson CreateGroupLessonAndAddToSchedule(string lessonName, LessonNums lessonNumber, DayOfWeek dayOfWeek, string teacherName, uint room)
-        {
-            var lesson = new Lesson(lessonName, lessonNumber, dayOfWeek, teacherName, room);
-            GroupSchedule.Lessons.Add(lesson);
-
-            foreach (ExtraStudent eStudent in EStudents)
-            {
-                eStudent.StudentSchedule.Lessons.Add(lesson);
-            }
-
-            return lesson;
-        }
 
         public void AddPerson(ExtraStudent student)
         {
@@ -43,16 +34,22 @@ namespace IsuExtra.Classes
             EStudents.Remove(student);
         }
 
-        public ExtraStudent CreateAndAddStudentToGroup(string name)
+        public bool ValidStudentCount() => EStudents.Count == StudentLimit;
+        private int ConverterCharToInt(string name)
         {
-            if (!ValidStudentCount())
+            int x = name[1] - '0';
+            return x;
+        }
+
+        private bool CheckGroupName(string groupName)
+        {
+            int cnt = ConverterCharToInt(groupName);
+            if (cnt != NumberOfPreparation)
             {
-                throw new IsuException("Group has max number of students");
+                throw new IsuException("Incorrect group name!");
             }
 
-            var student = new ExtraStudent(name, ++_studentId);
-            EStudents.Add(student);
-            return student;
+            return true;
         }
     }
 }
