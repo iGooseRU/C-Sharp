@@ -61,7 +61,26 @@ namespace Backups.Classes
             RestorePoints.Add(restorePoint);
             restorePoint.AddJobObjects(JobObjects);
 
-            Algorithm.CreateArchive(restorePoint, Repository);
+            string filePath = null;
+            foreach (JobObject currentObj in restorePoint.JobObjects)
+            {
+                filePath = currentObj.FilePath;
+            }
+
+            Algorithm.CreateArchive(restorePoint, Repository, filePath);
+            return restorePoint;
+        }
+
+        public RestorePoint CreateRestorePoint(string filePath)
+        {
+            var restorePoint = new RestorePoint(this);
+            restorePoint.RestorePointPath = restorePoint.CreateRestorePointFolder(restorePoint.RestorePointName);
+
+            RestorePoints.Add(restorePoint);
+            restorePoint.AddJobObjects(JobObjects);
+
+            Algorithm.CreateArchive(restorePoint, Repository, filePath);
+
             return restorePoint;
         }
     }
