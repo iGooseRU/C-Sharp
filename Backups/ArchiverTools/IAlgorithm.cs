@@ -6,6 +6,6 @@ namespace Backups.ArchiverTools
 {
     public interface IAlgorithm
     {
-        void CreateArchive(RestorePoint restorePoint, IRepository repository);
+        void CreateArchive(RestorePoint restorePoint, IRepository repository, string newFilePath);
     }
 }

@@ -7,9 +7,18 @@ namespace Backups.ArchiverTools
 {
     public class SplitStorage : IAlgorithm
     {
-        public void CreateArchive(RestorePoint restorePoint, IRepository repository)
+        public void CreateArchive(RestorePoint restorePoint, IRepository repository, string filePath)
         {
-            repository.SplitStorageArchive(restorePoint);
+            foreach (JobObject obj in restorePoint.JobObjects)
+            {
+                string archivePath = restorePoint.RestorePointPath + $@"\{obj.FileName}.zip";
+                using (ZipArchive zipArchive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
+                {
+                    repository.SaveData(obj, zipArchive, filePath);
+                }
+
+                repository.MakeStorage(restorePoint, archivePath);
+            }
         }
     }
 }
