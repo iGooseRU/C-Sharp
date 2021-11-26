@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Backups.ArchiverTools;
+using Backups.Repository;
 using Backups.Tools;
 
 namespace Backups.Classes
 {
     public class BackupJob
     {
-        public BackupJob(string backupJobName, IAlgorithm algorithm)
+        public BackupJob(string backupJobName, IAlgorithm algorithm, IRepository repository)
         {
             BackupJobName = backupJobName;
             BackupJobPath = CreateBackupJobFolder(backupJobName);
             Algorithm = algorithm;
+            Repository = repository;
 
             JobObjects = new List<JobObject>();
             RestorePoints = new List<RestorePoint>();
@@ -21,6 +23,7 @@ namespace Backups.Classes
         public List<JobObject> JobObjects { get; }
         public List<RestorePoint> RestorePoints { get; }
         public IAlgorithm Algorithm { get; }
+        public IRepository Repository { get; }
         public string BackupJobPath { get; set; }
 
         public string CreateBackupJobFolder(string backupJobName)
@@ -58,8 +61,7 @@ namespace Backups.Classes
             RestorePoints.Add(restorePoint);
             restorePoint.AddJobObjects(JobObjects);
 
-            Algorithm.CreateArchive(restorePoint);
-
+            Algorithm.CreateArchive(restorePoint, Repository);
             return restorePoint;
         }
     }

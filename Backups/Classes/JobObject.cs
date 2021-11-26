@@ -13,6 +13,6 @@ namespace Backups.Classes
 
         public FileInfo File { get; }
         public string FileName { get; set; }
-        public string FilePath { get; }
+        public string FilePath { get; set; }
     }
 }

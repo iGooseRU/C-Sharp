@@ -1,27 +1,15 @@
 ﻿using System.IO.Compression;
 using Backups.Classes;
+using Backups.Repository;
 using Backups.Tools;
 
-namespace Backups.ArchiverTools // New archives for every storage
+namespace Backups.ArchiverTools
 {
     public class SplitStorage : IAlgorithm
     {
-        public void CreateArchive(RestorePoint restorePoint)
+        public void CreateArchive(RestorePoint restorePoint, IRepository repository)
         {
-            foreach (JobObject obj in restorePoint.JobObjects)
-            {
-                string archivePath = restorePoint.RestorePointPath + $@"\{obj.FileName}.zip";
-                using (ZipArchive zipArchive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
-                {
-                    string pathToFileToAdd = obj.FilePath;
-                    string nameOfFileToAdd = obj.FileName;
-
-                    zipArchive.CreateEntryFromFile(pathToFileToAdd, nameOfFileToAdd);
-                }
-
-                var storage = new Storage(archivePath);
-                restorePoint.Storages.Add(storage);
-            }
+            repository.SplitStorageArchive(restorePoint);
         }
     }
 }

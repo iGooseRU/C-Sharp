@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Backups.ArchiverTools;
 using Backups.Classes;
+using Backups.Repository;
 using NUnit.Framework;
 
 namespace Backups.Tests
@@ -26,7 +27,7 @@ namespace Backups.Tests
         [Test]
         public void SplitStorageTest()
         {
-            var bJob = new BackupJob("firstTestJob", new SplitStorage());
+            var bJob = new BackupJob("firstTestJob", new SplitStorage(), new VirtualRepository());
             var firstObj = new JobObject(_file1);
             var secondObj = new JobObject(_file2);
             bJob.AddJobObject(firstObj);
@@ -35,22 +36,6 @@ namespace Backups.Tests
             bJob.RemoveJobObject(secondObj);
             var secondRestorePoint = bJob.CreateRestorePoint();
             Assert.AreEqual(secondRestorePoint.Storages.Count, 1);
-        }
-
-        [Test]
-        public void SingleStorageTest()
-        {
-            var bJob = new BackupJob("firstTestJob", new SingleStorage());
-            var firstObj = new JobObject(_file1);
-            var secondObj = new JobObject(_file2);
-            var thirdObj = new JobObject(_file3);
-            bJob.AddJobObject(firstObj);
-            bJob.AddJobObject(secondObj);
-            bJob.AddJobObject(thirdObj);
-            var firstRestorePoint = bJob.CreateRestorePoint();
-            bJob.RemoveJobObject(secondObj);
-            var secondRestorePoint = bJob.CreateRestorePoint();
-            Assert.AreEqual(secondRestorePoint.Storages.Count, 2);
         }
     }
 }
