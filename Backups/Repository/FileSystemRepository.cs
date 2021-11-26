@@ -13,6 +13,7 @@ namespace Backups.Repository
 
         public void SaveData(JobObject obj, ZipArchive zipArchive, string newFilePath)
         {
+            obj.FilePath = newFilePath;
             string pathToFileToAdd = obj.FilePath;
             string nameOfFileToAdd = obj.FileName;
 
