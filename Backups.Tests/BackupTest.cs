@@ -25,9 +25,23 @@ namespace Backups.Tests
         }
 
         [Test]
-        public void SplitStorageTest()
+        public void VirtualSplitStorageTest()
         {
             var bJob = new BackupJob("firstTestJob", new SplitStorage(), new VirtualRepository());
+            var firstObj = new JobObject(_file1);
+            var secondObj = new JobObject(_file2);
+            bJob.AddJobObject(firstObj);
+            bJob.AddJobObject(secondObj);
+            var firstRestorePoint = bJob.CreateRestorePoint();
+            bJob.RemoveJobObject(secondObj);
+            var secondRestorePoint = bJob.CreateRestorePoint();
+            Assert.AreEqual(secondRestorePoint.Storages.Count, 1);
+        }
+
+        [Test]
+        public void FileSystemSplitStorageTest()
+        {
+            var bJob = new BackupJob("secondTestJob", new SplitStorage(), new FileSystemRepository());
             var firstObj = new JobObject(_file1);
             var secondObj = new JobObject(_file2);
             bJob.AddJobObject(firstObj);
