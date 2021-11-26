@@ -47,5 +47,10 @@ namespace Backups.Classes
 
             return path + subPath;
         }
+
+        public void AddStorage(Storage storage)
+        {
+            Storages.Add(storage);
+        }
     }
 }
