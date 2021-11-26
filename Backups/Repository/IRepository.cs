@@ -1,11 +1,11 @@
-﻿using Backups.Classes;
+﻿using System.IO.Compression;
+using Backups.Classes;
 
 namespace Backups.Repository
 {
     public interface IRepository
     {
         void MakeStorage(RestorePoint restorePoint, string archivePath);
-        void SingleStorageArchive(RestorePoint restorePoint);
-        void SplitStorageArchive(RestorePoint restorePoint);
+        void SaveData(JobObject obj, ZipArchive zipArchive, string newFilePath);
     }
 }
