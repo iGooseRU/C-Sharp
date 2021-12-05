@@ -1,4 +1,6 @@
-﻿namespace Banks.Builder
+﻿using Banks.Entities;
+
+namespace Banks.Builder
 {
     public class Director
     {
@@ -9,11 +11,12 @@
             set => _builder = value;
         }
 
-        public void RegisterClient()
+        public void RegisterClient(string phoneNumber, string firstName, string secondName, string passportData, Bank bank)
         {
-            _builder.RegisterPhoneNumber();
-            _builder.RegisterClientName();
-            _builder.RegisterClientPassportData();
+            _builder.RegisterPhoneNumber(phoneNumber);
+            _builder.RegisterClientName(firstName, secondName);
+            _builder.RegisterClientPassportData(passportData);
+            _builder.CreateAccountListAddBank(bank);
         }
     }
 }

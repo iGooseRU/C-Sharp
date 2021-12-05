@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Banks.Account;
 using Banks.Builder;
 
 namespace Banks.Entities
@@ -12,26 +11,15 @@ namespace Banks.Entities
             BankName = bankName;
             LicenseNum = GenerateLicenseNum();
             Clients = new List<BankClient>();
-            Accounts = new List<IAccount>();
         }
 
         public string BankName { get; }
         public int LicenseNum { get; }
         public List<BankClient> Clients { get; }
-        public List<IAccount> Accounts { get; }
 
-        public BankClient CreateClient()
+        public void AddClient(BankClient client)
         {
-            var director = new Director();
-            var builder = new BankClientBuilder();
-            director.Builder = builder;
-
-            director.RegisterClient();
-            BankClient client = builder.GetClient();
-            client.ClientsBank = this;
             Clients.Add(client);
-
-            return client;
         }
 
         private static int GenerateLicenseNum()
