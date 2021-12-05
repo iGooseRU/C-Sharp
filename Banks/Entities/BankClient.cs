@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Banks.Account;
+using Banks.Builder;
 
 namespace Banks.Entities
 {
     public class BankClient
     {
-        public BankClient()
-        {
-        }
-
         public string PhoneNumber { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
         public string PassportNumber { get; set; }
         public Bank ClientsBank { get; set; }
         public bool AccountStatus { get; set; } // if 0 => questionable
