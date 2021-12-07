@@ -7,6 +7,6 @@ namespace Banks.Builder
         void RegisterPhoneNumber(string phoneNumber);
         void RegisterClientName(string firstName, string secondName);
         void RegisterClientPassportData(string passportData);
-        void CreateAccountListAddBank(Bank bank);
+        void CreateAccountsListAddBank(Bank bank);
     }
 }

@@ -15,9 +15,9 @@ namespace Banks.Entities
         public List<Bank> Banks { get; }
         public List<BankClient> AllClients { get; }
 
-        public Bank CreateBank(string name)
+        public Bank CreateBank(string name, int percentageOnBalance)
         {
-            var bank = new Bank(name);
+            var bank = new Bank(name, percentageOnBalance);
             Banks.Add(bank);
 
             return bank;

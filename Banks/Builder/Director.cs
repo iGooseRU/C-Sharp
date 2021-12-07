@@ -16,7 +16,7 @@ namespace Banks.Builder
             _builder.RegisterPhoneNumber(phoneNumber);
             _builder.RegisterClientName(firstName, secondName);
             _builder.RegisterClientPassportData(passportData);
-            _builder.CreateAccountListAddBank(bank);
+            _builder.CreateAccountsListAddBank(bank);
         }
     }
 }
