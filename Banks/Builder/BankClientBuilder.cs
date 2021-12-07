@@ -33,7 +33,7 @@ namespace Banks.Builder
 
         public void RegisterClientPassportData(string passportData)
         {
-            if (passportData == "skip")
+            if (passportData == "skip" || passportData == null)
             {
                 Console.WriteLine("Your account is questionable!");
                 _client.PassportNumber = null;
@@ -46,9 +46,11 @@ namespace Banks.Builder
             }
         }
 
-        public void CreateAccountListAddBank(Bank bank)
+        public void CreateAccountsListAddBank(Bank bank)
         {
-            _client.Accounts = new List<IAccount>();
+            _client.DepositAccounts = new List<DepositAccount>();
+            _client.DebitAccounts = new List<DebitAccount>();
+            _client.CreditAccounts = new List<CreditAccount>();
             _client.ClientsBank = bank;
         }
 
