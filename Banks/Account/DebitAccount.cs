@@ -6,7 +6,7 @@ namespace Banks.Account
 {
     public class DebitAccount : IAccount
     {
-        private const int StartMoneyCount = 0;
+        private const double StartMoneyCount = 0;
         public DebitAccount(BankClient client)
         {
             Client = client;
@@ -18,21 +18,17 @@ namespace Banks.Account
 
             WithdrawAvailable = true;
             MoneyCount = StartMoneyCount;
-            ExtraMoney = StartMoneyCount;
 
-            SettlementPeriod = DateTime.Now.Date;
-
-            CalculatePercents();
+            CurrentMonth = DateTime.Now.Month;
         }
 
         public string AccountId { get; set; }
         public bool WithdrawAvailable { get; }
         public BankClient Client { get; }
-        public int MoneyCount { get; set; }
+        public double MoneyCount { get; set; }
         public AccountTypeFlag AccountType { get; }
         public Bank ClientsBank { get; }
-        public int ExtraMoney { get; set; }
-        public DateTime SettlementPeriod { get; set; }
+        public int CurrentMonth { get; set; }
 
         public void CreateAccount()
         {
@@ -40,7 +36,7 @@ namespace Banks.Account
             Client.ClientsBank.DebitAccounts.Add(this);
         }
 
-        public void TopUpMoney(int moneyAmount)
+        public void TopUpMoney(double moneyAmount)
         {
             if (moneyAmount <= 0)
                 throw new BanksException("Money amount < 0");
@@ -56,14 +52,16 @@ namespace Banks.Account
             MoneyCount -= moneyAmount;
         }
 
-        public void CalculatePercents()
+        public void SkipMonth()
         {
-            while (SettlementPeriod == DateTime.Now.Date)
-            {
-                ExtraMoney = (MoneyCount / 100) * ClientsBank.PercentageOnBalance;
-                MoneyCount += ExtraMoney;
-                break;
-            }
+            ++CurrentMonth;
+            PercentHandler();
+        }
+
+        public void PercentHandler()
+        {
+            var cnt = (MoneyCount / 100) * ClientsBank.PercentageOnBalance;
+            MoneyCount += cnt;
         }
     }
 }

@@ -19,23 +19,41 @@ namespace Banks.Entities
         public List<DebitAccount> DebitAccounts { get; set; }
         public List<DepositAccount> DepositAccounts { get; set; }
         public List<CreditAccount> CreditAccounts { get; set; }
+        public Transaction LastOperation { get; set; }
 
         public void CreateDebitAccount(IAccount account)
         {
             account.CreateAccount();
         }
 
-        public void CreateDepositAccount(IAccount account)
+        public void CreateDepositAccount(IAccount account, DateTime depositTerm)
         {
             account.CreateAccount();
+
+            DepositAccount acc = null;
+            foreach (DepositAccount o in DepositAccounts)
+            {
+                acc = o;
+            }
+
+            acc.DepositTerm = depositTerm;
         }
 
-        public void CreateCreditAccount(IAccount account)
+        public void CreateCreditAccount(IAccount account, int creditLimit)
         {
             account.CreateAccount();
+
+            CreditAccount acc = null;
+            foreach (CreditAccount o in CreditAccounts)
+            {
+                acc = o;
+            }
+
+            if (acc != null)
+                acc.CreditLimit = -creditLimit;
         }
 
-        public void TopOpMoney(int moneyAmount, string accountId)
+        public void TopOpMoney(double moneyAmount, string accountId)
         {
             AccountTypeFlag type = AccountTypeHandler(accountId);
 
@@ -111,11 +129,35 @@ namespace Banks.Entities
             }
         }
 
-        public void GetMoneyAmount(string accountId)
+        public void GetListOfAccounts(BankClient client)
         {
+            Console.WriteLine("__________AccountsInfo__________");
+            Console.WriteLine();
+            Console.WriteLine("CreditAccounts:");
+            foreach (CreditAccount o in client.CreditAccounts)
+            {
+                Console.WriteLine("AccountId:" + o.AccountId);
+                Console.WriteLine("Money amount:" + o.MoneyCount);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("DebitAccounts:");
+            foreach (DebitAccount o in client.DebitAccounts)
+            {
+                Console.WriteLine("AccountId:" + o.AccountId);
+                Console.WriteLine("Money amount:" + o.MoneyCount);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("DepositAccounts:");
+            foreach (DepositAccount o in client.DepositAccounts)
+            {
+                Console.WriteLine("AccountId:" + o.AccountId);
+                Console.WriteLine("Money amount:" + o.MoneyCount);
+            }
         }
 
-        private AccountTypeFlag AccountTypeHandler(string accountId)
+        public AccountTypeFlag AccountTypeHandler(string accountId)
         {
             if (accountId[0] == CreditPrefix[0] && accountId[1] == CreditPrefix[1] &&
                 accountId[2] == CreditPrefix[2])
@@ -136,10 +178,6 @@ namespace Banks.Entities
             }
 
             return AccountTypeFlag.Unknown;
-        }
-
-        private void DepositTermRequest()
-        {
         }
     }
 }

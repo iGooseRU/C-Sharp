@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Banks;
 using Banks.Builder;
 using Banks.Tools;
 
@@ -14,10 +16,9 @@ namespace Banks.Entities
 
         public List<Bank> Banks { get; }
         public List<BankClient> AllClients { get; }
-
-        public Bank CreateBank(string name, int percentageOnBalance)
+        public Bank CreateBank(string name)
         {
-            var bank = new Bank(name, percentageOnBalance);
+            var bank = new Bank(name);
             Banks.Add(bank);
 
             return bank;
@@ -37,6 +38,18 @@ namespace Banks.Entities
             AddClientToGlobalList(client);
 
             return client;
+        }
+
+        public void MakeMoneyTransfer(int moneyAmount, BankClient sendClient, BankClient receiveClient, string sendAccountId, string receiveAccountId)
+        {
+            var transaction = new Transaction(this, moneyAmount, sendClient, receiveClient, sendAccountId, receiveAccountId);
+            transaction.MakeOperation();
+        }
+
+        public void CancelLastOperation(BankClient client)
+        {
+            Transaction transaction = client.LastOperation;
+            transaction.CancelOperation();
         }
 
         public void AddClientToGlobalList(BankClient client)

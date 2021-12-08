@@ -7,10 +7,22 @@ namespace Banks.Entities
 {
     public class Bank
     {
-        public Bank(string bankName, int percentageOnBalance)
+        // for deposit
+        private const double DepositPerc = 4;
+
+        // for credit
+        private const double CreditPerc = 3;
+
+        // for debit
+        private const double PercOnBalance = 1;
+
+        public Bank(string bankName)
         {
             BankName = bankName;
-            PercentageOnBalance = percentageOnBalance;
+
+            PercentageOnBalance = PercOnBalance;
+            CreditPercentage = CreditPerc;
+            DepositPercentage = DepositPerc;
 
             LicenseNum = GenerateLicenseNum();
             Clients = new List<BankClient>();
@@ -25,7 +37,9 @@ namespace Banks.Entities
         public List<DebitAccount> DebitAccounts { get; set; }
         public List<DepositAccount> DepositAccounts { get; set; }
         public List<CreditAccount> CreditAccounts { get; set; }
-        public int PercentageOnBalance { get; set; }
+        public double PercentageOnBalance { get; set; }
+        public double CreditPercentage { get; set; }
+        public double DepositPercentage { get; set; }
         public void AddClient(BankClient client)
         {
             Clients.Add(client);

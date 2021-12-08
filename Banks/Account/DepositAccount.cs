@@ -6,7 +6,7 @@ namespace Banks.Account
 {
     public class DepositAccount : IAccount
     {
-        private const int StartMoneyCount = 0;
+        private const double StartMoneyCount = 0;
 
         public DepositAccount(BankClient client)
         {
@@ -19,17 +19,17 @@ namespace Banks.Account
 
             WithdrawAvailable = false;
             MoneyCount = StartMoneyCount;
-            ExtraMoney = StartMoneyCount;
+            CurrentMonth = DateTime.Now.Month;
         }
 
         public string AccountId { get; set; }
-        public bool WithdrawAvailable { get; }
+        public bool WithdrawAvailable { get; set; }
         public BankClient Client { get; }
-        public int MoneyCount { get; set; }
+        public double MoneyCount { get; set; }
         public AccountTypeFlag AccountType { get; }
         public Bank ClientsBank { get; }
-        public int ExtraMoney { get; set; }
         public DateTime DepositTerm { get; set; }
+        public int CurrentMonth { get; set; }
 
         public void CreateAccount()
         {
@@ -37,7 +37,7 @@ namespace Banks.Account
             Client.ClientsBank.DepositAccounts.Add(this);
         }
 
-        public void TopUpMoney(int moneyAmount)
+        public void TopUpMoney(double moneyAmount)
         {
             if (moneyAmount <= 0)
                 throw new BanksException("Money amount < 0");
@@ -47,7 +47,6 @@ namespace Banks.Account
 
         public void MoneyWithdraw(int moneyAmount)
         {
-            // add check logic
             if (!WithdrawAvailable)
                 throw new BanksException("You can not to withdraw money before the end of the term");
 
@@ -55,6 +54,22 @@ namespace Banks.Account
                     throw new BanksException("Not enough money");
 
             MoneyCount -= moneyAmount;
+        }
+
+        public void SkipMonth()
+        {
+            ++CurrentMonth;
+            PercentHandler();
+
+            if (DepositTerm.Month == CurrentMonth)
+            {
+                WithdrawAvailable = true;
+            }
+        }
+
+        public void PercentHandler()
+        {
+            MoneyCount += (MoneyCount / 100) * ClientsBank.DepositPercentage;
         }
     }
 }
