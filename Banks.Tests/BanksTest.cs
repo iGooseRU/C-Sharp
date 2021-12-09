@@ -18,27 +18,31 @@ namespace Banks.Tests
         [Test]
         public void CreateBankAddClientTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+            Bank testBank = _centralBank.CreateBank(bankName);
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             Assert.Contains(firstClient, testBank.Clients);
         }
 
         [Test]
         public void QuestionableAccountTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+            _centralBank.CreateBank(bankName);
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", null, testBank);
+                "Guskov", null, bankName);
             Assert.AreEqual(false, firstClient.AccountStatus);
         }
 
         [Test]
         public void CreateDebitAccountClientTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            _centralBank.CreateBank(bankName);
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
             Assert.AreEqual(1, firstClient.DebitAccounts.Count);
         }
@@ -46,9 +50,11 @@ namespace Banks.Tests
         [Test]
         public void CreateDebitAccountBankTest()
         {
+            string bankName = "Tinkoff Bank";
+
             Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
             Assert.AreEqual(1, testBank.DebitAccounts.Count);
         }
@@ -56,9 +62,11 @@ namespace Banks.Tests
         [Test]
         public void TopUpMoneyDebitAccountTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
 
             string accountId = null;
@@ -81,9 +89,11 @@ namespace Banks.Tests
         [Test]
         public void WithdrawMoneyDebitAccountTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
 
             string accountId = null;
@@ -109,9 +119,11 @@ namespace Banks.Tests
         {
             Assert.Catch<BanksException>(() =>
             {
-                Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+                string bankName = "Tinkoff Bank";
+
+                _centralBank.CreateBank("Tinkoff Bank");
                 BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                    "Guskov", "4016 571549", testBank);
+                    "Guskov", "4016 571549", bankName);
                 firstClient.CreateCreditAccount(new CreditAccount(firstClient), 5000);
 
                 string accountId = null;
@@ -128,12 +140,14 @@ namespace Banks.Tests
         [Test]
         public void TransactionTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
             BankClient secondClient = _centralBank.CreateClient("+79218653232", "Name",
-                "Surname", "4016 571555", testBank);
+                "Surname", "4016 571555", bankName);
             secondClient.CreateDebitAccount(new DebitAccount(secondClient));
 
             string firstClientAccountId = null;
@@ -156,20 +170,22 @@ namespace Banks.Tests
             {
                 firstClientAccount = o;
             }
-            
-            Assert.AreEqual(700, firstClientAccount.MoneyCount);
+
+            if (firstClientAccount != null) Assert.AreEqual(700, firstClientAccount.MoneyCount);
         }
         
         [Test]
         public void CancelTransactionTest()
         {
-            const int MoneyTopUp = 1000;
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            const int moneyTopUp = 1000;
+            _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
             BankClient secondClient = _centralBank.CreateClient("+79218653232", "Name",
-                "Surname", "4016 571555", testBank);
+                "Surname", "4016 571555", bankName);
             secondClient.CreateDebitAccount(new DebitAccount(secondClient));
 
             string firstClientAccountId = null;
@@ -184,7 +200,7 @@ namespace Banks.Tests
                 secondClientAccountId = o.AccountId;
             }
             
-            firstClient.TopOpMoney(MoneyTopUp, firstClientAccountId);
+            firstClient.TopOpMoney(moneyTopUp, firstClientAccountId);
             _centralBank.MakeMoneyTransfer(300, firstClient, secondClient, firstClientAccountId, secondClientAccountId);
             
             DebitAccount firstClientAccount = null;
@@ -194,16 +210,18 @@ namespace Banks.Tests
             }
             
             _centralBank.CancelLastOperation(firstClient);
-            
-            Assert.AreEqual(MoneyTopUp, firstClientAccount.MoneyCount);
+
+            if (firstClientAccount != null) Assert.AreEqual(moneyTopUp, firstClientAccount.MoneyCount);
         }
 
         [Test]
         public void SkipOneMonthTest()
         {
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
+            string bankName = "Tinkoff Bank";
+
+            _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", testBank);
+                "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
 
             string accountId = null;
@@ -219,10 +237,12 @@ namespace Banks.Tests
             {
                 account = o;
             }
-            
-            account.SkipMonth(); // +1 % to money amount
-            Assert.AreEqual(101, account.MoneyCount);
 
+            if (account != null)
+            {
+                account.SkipMonth(); // +1 % to money amount
+                Assert.AreEqual(101, account.MoneyCount);
+            }
         }
     }
 }
