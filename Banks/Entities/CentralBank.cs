@@ -24,9 +24,19 @@ namespace Banks.Entities
             return bank;
         }
 
-        public BankClient CreateClient(string phoneNumber, string firstName, string secondName, string passportData, Bank bank)
+        public void GetListOfAllBanks()
         {
-            if (Banks.Find(o => o.BankName == bank.BankName) == null)
+            Console.WriteLine("__________LIST OF ALL BANKS__________");
+            foreach (var bank in Banks)
+            {
+                Console.WriteLine(bank.BankName);
+            }
+        }
+
+        public BankClient CreateClient(string phoneNumber, string firstName, string secondName, string passportData, string bankName)
+        {
+            Bank bank = Banks.Find(m => m.BankName == bankName);
+            if (bank == null)
                 throw new BanksException("Can not to find bank. Try again.");
 
             var director = new Director();
