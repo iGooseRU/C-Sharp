@@ -24,6 +24,18 @@ namespace Banks.Entities
         public void CreateDebitAccount(IAccount account)
         {
             account.CreateAccount();
+
+            DepositAccount acc = null;
+            foreach (DepositAccount o in DepositAccounts)
+            {
+                acc = o;
+            }
+
+            if (DebitAccountsCountNotNull())
+            {
+                Console.WriteLine("Debit account has been created successfully!");
+                Console.WriteLine("Account ID: " + acc.AccountId);
+            }
         }
 
         public void CreateDepositAccount(IAccount account, DateTime depositTerm)
@@ -37,6 +49,12 @@ namespace Banks.Entities
             }
 
             acc.DepositTerm = depositTerm;
+
+            if (DepositAccountsCountNotNull())
+            {
+                Console.WriteLine("Deposit account has been created successfully!");
+                Console.WriteLine("Account ID: " + acc.AccountId);
+            }
         }
 
         public void CreateCreditAccount(IAccount account, int creditLimit)
@@ -51,6 +69,12 @@ namespace Banks.Entities
 
             if (acc != null)
                 acc.CreditLimit = -creditLimit;
+
+            if (CreditAccountsCountNotNull())
+            {
+                Console.WriteLine("Credit account has been created successfully!");
+                Console.WriteLine("Account ID: " + acc.AccountId);
+            }
         }
 
         public void TopOpMoney(double moneyAmount, string accountId)
@@ -129,9 +153,8 @@ namespace Banks.Entities
             }
         }
 
-        public void GetListOfAccounts(BankClient client)
+        public void GetListCreditAccounts(BankClient client)
         {
-            Console.WriteLine("__________AccountsInfo__________");
             Console.WriteLine();
             Console.WriteLine("CreditAccounts:");
             foreach (CreditAccount o in client.CreditAccounts)
@@ -141,6 +164,11 @@ namespace Banks.Entities
             }
 
             Console.WriteLine();
+        }
+
+        public void GetListDebitAccounts(BankClient client)
+        {
+            Console.WriteLine();
             Console.WriteLine("DebitAccounts:");
             foreach (DebitAccount o in client.DebitAccounts)
             {
@@ -149,12 +177,39 @@ namespace Banks.Entities
             }
 
             Console.WriteLine();
+        }
+
+        public void GetListDepositAccounts(BankClient client)
+        {
+            Console.WriteLine();
             Console.WriteLine("DepositAccounts:");
             foreach (DepositAccount o in client.DepositAccounts)
             {
                 Console.WriteLine("AccountId:" + o.AccountId);
                 Console.WriteLine("Money amount:" + o.MoneyCount);
             }
+
+            Console.WriteLine();
+        }
+
+        public void GetListOfAccounts(BankClient client)
+        {
+            Console.WriteLine("__________AccountsInfo__________");
+            GetListCreditAccounts(client);
+            GetListDebitAccounts(client);
+            GetListDepositAccounts(client);
+        }
+
+        public void GetClientsInfo(BankClient client)
+        {
+            Console.WriteLine("__________INFORMATION ABOUT " + client.FirstName + ' ' + client.SecondName + "__________");
+            Console.WriteLine("Name: " + FirstName);
+            Console.WriteLine("Surname: " + SecondName);
+            Console.WriteLine("Phone number: " + PhoneNumber);
+            Console.WriteLine("Passport data: " + (PassportNumber ?? "Not available"));
+            Console.WriteLine("Bank: " + ClientsBank.BankName);
+            Console.WriteLine("Account status: " + (AccountStatus ? "not questionable" : "questionable"));
+            GetListOfAccounts(client);
         }
 
         public AccountTypeFlag AccountTypeHandler(string accountId)
@@ -178,6 +233,21 @@ namespace Banks.Entities
             }
 
             return AccountTypeFlag.Unknown;
+        }
+
+        private bool CreditAccountsCountNotNull()
+        {
+            return CreditAccounts.Count != 0;
+        }
+
+        private bool DepositAccountsCountNotNull()
+        {
+            return DepositAccounts.Count != 0;
+        }
+
+        private bool DebitAccountsCountNotNull()
+        {
+            return DebitAccounts.Count != 0;
         }
     }
 }
