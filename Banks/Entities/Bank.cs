@@ -40,6 +40,15 @@ namespace Banks.Entities
         public double PercentageOnBalance { get; set; }
         public double CreditPercentage { get; set; }
         public double DepositPercentage { get; set; }
+
+        public void GetClientsList()
+        {
+            foreach (var client in Clients)
+            {
+                Console.WriteLine("Surname: " + client.SecondName + ' ' + "Phone number: " + client.PhoneNumber);
+            }
+        }
+
         public void AddClient(BankClient client)
         {
             Clients.Add(client);
