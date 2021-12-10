@@ -34,7 +34,6 @@ namespace Banks.Entities
             if (DebitAccountsCountNotNull())
             {
                 Console.WriteLine("Debit account has been created successfully!");
-                Console.WriteLine("Account ID: " + acc.AccountId);
             }
         }
 
@@ -53,7 +52,6 @@ namespace Banks.Entities
             if (DepositAccountsCountNotNull())
             {
                 Console.WriteLine("Deposit account has been created successfully!");
-                Console.WriteLine("Account ID: " + acc.AccountId);
             }
         }
 
@@ -73,7 +71,6 @@ namespace Banks.Entities
             if (CreditAccountsCountNotNull())
             {
                 Console.WriteLine("Credit account has been created successfully!");
-                Console.WriteLine("Account ID: " + acc.AccountId);
             }
         }
 
