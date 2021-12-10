@@ -13,16 +13,17 @@ namespace Banks
             Console.WriteLine("3. Open credit account for client"); // done
             Console.WriteLine("4. Open debit account for client"); // done
             Console.WriteLine("5. Open deposit account for client"); // done
-            Console.WriteLine("6. Top up money"); // processed
-            Console.WriteLine("7. Withdraw money"); // processed
-            Console.WriteLine("8. Complete money tranfer"); // processed
-            Console.WriteLine("9. Cancel money transfer"); // processed
+            Console.WriteLine("6. Top up money"); // done
+            Console.WriteLine("7. Withdraw money"); // done
+            Console.WriteLine("8. Complete money transfer"); // done
+            Console.WriteLine("9. Cancel money transfer"); // done
             Console.WriteLine("10. Skip one month for credit"); // done
             Console.WriteLine("11. Skip one month for debit"); // done
             Console.WriteLine("12. Skip one month for deposit"); // done
             Console.WriteLine("13. Get list of all banks"); // done
             Console.WriteLine("14. Get client information"); // done
-            Console.WriteLine("15. Shutdown"); // done
+            Console.WriteLine("15. Drink beer"); // processed
+            Console.WriteLine("Exit. Shutdown"); // done
             Console.WriteLine("__________________________________");
             Console.WriteLine();
         }
