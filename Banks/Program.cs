@@ -14,6 +14,7 @@ namespace Banks
             // ПОКА ОНО РАБОТАЕТ С ГОРЕМ ПОПОЛАМ
             var centralBank = new CentralBank();
 
+            Console.ForegroundColor = ConsoleColor.Red;
             string ch = "y";
             while (ch == "y" || ch == "Y")
             {
@@ -21,7 +22,7 @@ namespace Banks
                 printTool.PrintStartMenu();
                 Console.Write("Enter your answer:");
 
-                int ans = Convert.ToInt32(Console.ReadLine());
+                string ans = Console.ReadLine();
                 Console.WriteLine();
                 Console.WriteLine("__________________________________");
                 Console.WriteLine();
@@ -29,10 +30,12 @@ namespace Banks
                 {
                     default:
                         throw new BanksException("Unknown answer. Try again.");
-                    case 15:
+                    case "Exit":
+                        return;
+                    case "exit":
                         return;
 
-                    case 1:
+                    case "1":
                         Console.Write("Enter bank's name:");
                         var cnt = centralBank.CreateBank(Console.ReadLine());
 
@@ -47,7 +50,7 @@ namespace Banks
 
                         break;
 
-                    case 2:
+                    case "2":
                         Console.WriteLine("Enter information about client:");
                         Console.Write("Phone number:");
                         string phoneNum = Console.ReadLine();
@@ -75,7 +78,7 @@ namespace Banks
                             Console.WriteLine("Client has been created successfully!");
                         break;
 
-                    case 3:
+                    case "3":
                         Console.WriteLine("Creating credit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -107,7 +110,7 @@ namespace Banks
 
                         break;
 
-                    case 4:
+                    case "4":
                         Console.WriteLine("Creating debit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -137,7 +140,7 @@ namespace Banks
 
                         break;
 
-                    case 5:
+                    case "5":
                         Console.WriteLine("Creating deposit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -169,23 +172,358 @@ namespace Banks
 
                         break;
 
-                    case 6:
-                        // top up money
+                    case "6":
+                        Console.WriteLine("__________TOP UP MONEY MENU__________");
+                        Console.WriteLine("Choose bank:");
+                        Console.WriteLine("All available banks:");
+                        centralBank.GetListOfAllBanks();
+                        Console.Write("Enter bank:");
+                        string bankAnsa = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Choose client:");
+                        foreach (var o in centralBank.Banks)
+                        {
+                            if (bankAnsa == o.BankName)
+                            {
+                                o.GetClientsList();
+                            }
+                        }
+
+                        Console.Write("Enter client's phone number:");
+                        string phnum = Console.ReadLine();
+
+                        foreach (var o in centralBank.AllClients)
+                        {
+                            if (phnum == o.PhoneNumber)
+                            {
+                                Console.WriteLine("All available accounts:");
+                                o.GetListOfAccounts(o);
+                                Console.Write("Enter account:");
+                                string accTopUp = Console.ReadLine();
+                                var accType = o.AccountTypeHandler(accTopUp);
+                                Console.Write("Enter money amount: ");
+                                double moneyAmount = Convert.ToDouble(Console.ReadLine());
+
+                                switch (accType)
+                                {
+                                    default:
+                                        throw new BanksException("Can not to top up money. Try later.");
+                                    case AccountTypeFlag.Unknown:
+                                        throw new BanksException("Can not to top up money. Try later.");
+
+                                    case AccountTypeFlag.Credit:
+                                        foreach (var m in o.CreditAccounts)
+                                        {
+                                            if (accTopUp == m.AccountId)
+                                            {
+                                                m.TopUpMoney(moneyAmount);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+
+                                    case AccountTypeFlag.Debit:
+                                        foreach (var m in o.DebitAccounts)
+                                        {
+                                            if (accTopUp == m.AccountId)
+                                            {
+                                                m.TopUpMoney(moneyAmount);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+
+                                    case AccountTypeFlag.Deposit:
+                                        foreach (var m in o.DepositAccounts)
+                                        {
+                                            if (accTopUp == m.AccountId)
+                                            {
+                                                m.TopUpMoney(moneyAmount);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+                                }
+                            }
+                        }
+
                         break;
 
-                    case 7:
-                        // withdraw
+                    case "7":
+                        Console.WriteLine("__________WITHDRAW MONEY MENU__________");
+                        Console.WriteLine("Choose bank:");
+                        Console.WriteLine("All available banks:");
+                        centralBank.GetListOfAllBanks();
+                        Console.Write("Enter bank:");
+                        string bankAnsp = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Choose client:");
+                        foreach (var o in centralBank.Banks)
+                        {
+                            if (bankAnsp == o.BankName)
+                            {
+                                o.GetClientsList();
+                            }
+                        }
+
+                        Console.Write("Enter client's phone number:");
+                        string phnum1 = Console.ReadLine();
+
+                        foreach (var o in centralBank.AllClients)
+                        {
+                            if (phnum1 == o.PhoneNumber)
+                            {
+                                Console.WriteLine("All available accounts:");
+                                o.GetListOfAccounts(o);
+                                Console.Write("Enter account:");
+                                string accWithdraw = Console.ReadLine();
+                                var accType = o.AccountTypeHandler(accWithdraw);
+                                Console.Write("Enter money amount: ");
+                                int moneyAmount = Convert.ToInt32(Console.ReadLine());
+
+                                switch (accType)
+                                {
+                                    default:
+                                        throw new BanksException("Can not to withdraw money. Try later.");
+                                    case AccountTypeFlag.Unknown:
+                                        throw new BanksException("Can not to withdraw money. Try later.");
+
+                                    case AccountTypeFlag.Credit:
+                                        foreach (var m in o.CreditAccounts)
+                                        {
+                                            if (accWithdraw == m.AccountId)
+                                            {
+                                                o.WithdrawMoney(moneyAmount, accWithdraw);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+
+                                    case AccountTypeFlag.Debit:
+                                        foreach (var m in o.DebitAccounts)
+                                        {
+                                            if (accWithdraw == m.AccountId)
+                                            {
+                                                m.MoneyWithdraw(moneyAmount);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+
+                                    case AccountTypeFlag.Deposit:
+                                        foreach (var m in o.DepositAccounts)
+                                        {
+                                            if (accWithdraw == m.AccountId)
+                                            {
+                                                m.MoneyWithdraw(moneyAmount);
+                                            }
+                                            else
+                                            {
+                                                throw new BanksException("Can not to find account. Try again.");
+                                            }
+                                        }
+
+                                        break;
+                                }
+                            }
+                        }
+
                         break;
 
-                    case 8:
-                        // money transfer
+                    case "8":
+                        Console.WriteLine("__________MONEY TRANSFER__________");
+                        int moneyAmountTransfer = 0;
+                        string bankAnsTransfer = string.Empty;
+                        string bankAnsTransfer1 = string.Empty;
+                        BankClient sendClient = null;
+                        BankClient receiveClient = null;
+                        string sendId = string.Empty;
+                        string receiveId = string.Empty;
+
+                        Console.Write("Enter money amount: ");
+                        moneyAmountTransfer = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("Enter send client: ");
+                        Console.WriteLine("Choose bank:");
+                        Console.WriteLine("All available banks:");
+                        centralBank.GetListOfAllBanks();
+                        Console.Write("Enter bank:");
+                        bankAnsTransfer = Console.ReadLine();
+
+                        Console.WriteLine();
+                        Console.WriteLine("Choose client:");
+                        foreach (var o in centralBank.Banks)
+                        {
+                            if (bankAnsTransfer == o.BankName)
+                            {
+                                o.GetClientsList();
+                            }
+                        }
+
+                        Console.Write("Enter client's phone number:");
+                        string phNumTransfer = Console.ReadLine();
+                        foreach (var o in centralBank.AllClients)
+                        {
+                            if (phNumTransfer == o.PhoneNumber)
+                            {
+                                sendClient = o;
+                                Console.WriteLine("Choose account type:");
+                                Console.WriteLine("Credit");
+                                Console.WriteLine("Debit");
+                                Console.WriteLine("Deposit");
+                                Console.Write("Your answer:");
+                                string choose = Console.ReadLine();
+                                var type = o.AccountTypeHandler(choose);
+
+                                switch (type)
+                                {
+                                    default:
+                                        throw new BanksException("Can not to get accounts. Try later.");
+                                    case AccountTypeFlag.Unknown:
+                                        throw new BanksException("Can not to get accounts. Try later.");
+                                    case AccountTypeFlag.Credit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListCreditAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        sendId = Console.ReadLine();
+                                        break;
+
+                                    case AccountTypeFlag.Debit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListDebitAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        sendId = Console.ReadLine();
+                                        break;
+
+                                    case AccountTypeFlag.Deposit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListDepositAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        sendId = Console.ReadLine();
+                                        break;
+                                }
+                            }
+                        }
+
+                        Console.WriteLine("Enter receive client: ");
+                        Console.WriteLine("Choose bank:");
+                        Console.WriteLine("All available banks:");
+                        centralBank.GetListOfAllBanks();
+                        Console.Write("Enter bank:");
+                        bankAnsTransfer1 = Console.ReadLine();
+
+                        Console.WriteLine();
+                        Console.WriteLine("Choose client:");
+                        foreach (var o in centralBank.Banks)
+                        {
+                            if (bankAnsTransfer1 == o.BankName)
+                            {
+                                o.GetClientsList();
+                            }
+                        }
+
+                        Console.Write("Enter client's phone number:");
+                        string phNumTransfer1 = Console.ReadLine();
+                        foreach (var o in centralBank.AllClients)
+                        {
+                            if (phNumTransfer1 == o.PhoneNumber)
+                            {
+                                receiveClient = o;
+                                Console.WriteLine("Choose account type:");
+                                Console.WriteLine("Credit");
+                                Console.WriteLine("Debit");
+                                Console.WriteLine("Deposit");
+                                Console.Write("Your answer:");
+                                string choose = Console.ReadLine();
+                                var type = o.AccountTypeHandler(choose);
+
+                                switch (type)
+                                {
+                                    default:
+                                        throw new BanksException("Can not to get accounts. Try later.");
+                                    case AccountTypeFlag.Unknown:
+                                        throw new BanksException("Can not to get accounts. Try later.");
+                                    case AccountTypeFlag.Credit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListCreditAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        receiveId = Console.ReadLine();
+                                        break;
+
+                                    case AccountTypeFlag.Debit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListDebitAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        receiveId = Console.ReadLine();
+                                        break;
+
+                                    case AccountTypeFlag.Deposit:
+                                        Console.WriteLine("Choose account:");
+                                        o.GetListDepositAccounts(o);
+                                        Console.Write("Your answer: ");
+                                        receiveId = Console.ReadLine();
+                                        break;
+                                }
+                            }
+                        }
+
+                        centralBank.MakeMoneyTransfer(moneyAmountTransfer, sendClient, receiveClient, sendId, receiveId);
+
                         break;
 
-                    case 9:
-                        // cancel last money transfer
+                    case "9":
+                        Console.WriteLine("__________CANCEL LAST OPERATION MENU__________");
+                        Console.WriteLine("Choose bank:");
+                        Console.WriteLine("All available banks:");
+                        centralBank.GetListOfAllBanks();
+                        Console.Write("Enter bank:");
+                        string bankAnsCancelOperation = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Choose client:");
+                        foreach (var o in centralBank.Banks)
+                        {
+                            if (bankAnsCancelOperation == o.BankName)
+                            {
+                                o.GetClientsList();
+                            }
+                        }
+
+                        Console.Write("Enter client's phone number:");
+                        string phNumCancelOperation = Console.ReadLine();
+
+                        foreach (var o in centralBank.AllClients)
+                        {
+                            if (phNumCancelOperation == o.PhoneNumber)
+                            {
+                                centralBank.CancelLastOperation(o);
+                                Console.WriteLine("You have successfully canceled last operation!");
+                                Console.WriteLine(o.LastOperation.MoneyAmount + "returned to " + o.LastOperation.SendAccountId);
+                            }
+                        }
+
                         break;
 
-                    case 10:
+                    case "10":
                         Console.WriteLine("Skipping one month for credit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -227,7 +565,7 @@ namespace Banks
 
                         break;
 
-                    case 11:
+                    case "11":
                         Console.WriteLine("Skipping one month for debit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -269,7 +607,7 @@ namespace Banks
 
                         break;
 
-                    case 12:
+                    case "12":
                         Console.WriteLine("Skipping one month for deposit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -311,11 +649,11 @@ namespace Banks
 
                         break;
 
-                    case 13:
+                    case "13":
                         centralBank.GetListOfAllBanks();
                         break;
 
-                    case 14:
+                    case "14":
                         Console.WriteLine("CLIENT'S INFORMATION:");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
@@ -343,6 +681,11 @@ namespace Banks
                             }
                         }
 
+                        break;
+
+                    case "15":
+                        Console.WriteLine("You have successfully drank a beer.");
+                        Console.WriteLine("You are awesome!");
                         break;
                 }
             }
