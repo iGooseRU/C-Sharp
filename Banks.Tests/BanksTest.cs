@@ -24,7 +24,7 @@ namespace Banks.Tests
                 "Guskov", "4016 571549", bankName);
             Assert.Contains(firstClient, testBank.Clients);
         }
-
+        
         [Test]
         public void QuestionableAccountTest()
         {
@@ -36,112 +36,88 @@ namespace Banks.Tests
         }
 
         [Test]
-        public void CreateDebitAccountClientTest()
+        public void TopUpMoneyTest()
         {
             string bankName = "Tinkoff Bank";
-
-            _centralBank.CreateBank(bankName);
-            BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", bankName);
-            firstClient.CreateDebitAccount(new DebitAccount(firstClient));
-            Assert.AreEqual(1, firstClient.DebitAccounts.Count);
-        }
         
-        [Test]
-        public void CreateDebitAccountBankTest()
-        {
-            string bankName = "Tinkoff Bank";
-
-            Bank testBank = _centralBank.CreateBank("Tinkoff Bank");
-            BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
-                "Guskov", "4016 571549", bankName);
-            firstClient.CreateDebitAccount(new DebitAccount(firstClient));
-            Assert.AreEqual(1, testBank.DebitAccounts.Count);
-        }
-        
-        [Test]
-        public void TopUpMoneyDebitAccountTest()
-        {
-            string bankName = "Tinkoff Bank";
-
             _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
                 "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
-
+            double moneyAmount = 0;
             string accountId = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            foreach (IAccount o in firstClient.Accounts)
             {
-                accountId = o.AccountId;
+                accountId = o.GetAccountId();
             }
             
             firstClient.TopOpMoney(250, accountId);
-
-            DebitAccount account = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+        
+            foreach (IAccount o in firstClient.Accounts)
             {
-                account = o;
+                moneyAmount = o.GetMoneyAmount();
             }
-
-            if (account != null) Assert.AreEqual(250, account.MoneyCount);
+            
+            Assert.AreEqual(250, moneyAmount);
         }
-
+        
         [Test]
-        public void WithdrawMoneyDebitAccountTest()
+        public void WithdrawMoneyTest()
         {
             string bankName = "Tinkoff Bank";
-
+        
             _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
                 "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
-
+        
             string accountId = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            double moneyAmount = 0;
+
+            foreach (IAccount o in firstClient.Accounts)
             {
-                accountId = o.AccountId;
+                accountId = o.GetAccountId();
             }
             
             firstClient.TopOpMoney(250, accountId);
             firstClient.WithdrawMoney(100, accountId);
-
-            DebitAccount account = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+        
+            foreach (IAccount o in firstClient.Accounts)
             {
-                account = o;
+                moneyAmount = o.GetMoneyAmount();
             }
-
-            if (account != null) Assert.AreEqual(150, account.MoneyCount);
+            
+            Assert.AreEqual(150, moneyAmount);
         }
-
+        
         [Test]
         public void WithdrawMoneyCreditAccountCatchExceptionTest()
         {
             Assert.Catch<BanksException>(() =>
             {
                 string bankName = "Tinkoff Bank";
-
+        
                 _centralBank.CreateBank("Tinkoff Bank");
                 BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
                     "Guskov", "4016 571549", bankName);
                 firstClient.CreateCreditAccount(new CreditAccount(firstClient), 5000);
-
+        
                 string accountId = null;
-                foreach (CreditAccount o in firstClient.CreditAccounts)
+                foreach (IAccount o in firstClient.Accounts)
                 {
-                    accountId = o.AccountId;
+                    accountId = o.GetAccountId();
                 }
-
+        
                 firstClient.TopOpMoney(250, accountId);
                 firstClient.WithdrawMoney(100, accountId);
             });
         }
-
+        
         [Test]
         public void TransactionTest()
         {
             string bankName = "Tinkoff Bank";
-
+        
             _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
                 "Guskov", "4016 571549", bankName);
@@ -149,36 +125,36 @@ namespace Banks.Tests
             BankClient secondClient = _centralBank.CreateClient("+79218653232", "Name",
                 "Surname", "4016 571555", bankName);
             secondClient.CreateDebitAccount(new DebitAccount(secondClient));
-
+        
             string firstClientAccountId = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            foreach (IAccount o in firstClient.Accounts)
             {
-                firstClientAccountId = o.AccountId;
+                firstClientAccountId = o.GetAccountId();
             }
             
             string secondClientAccountId = null;
-            foreach (DebitAccount o in secondClient.DebitAccounts)
+            foreach (IAccount o in secondClient.Accounts)
             {
-                secondClientAccountId = o.AccountId;
+                secondClientAccountId = o.GetAccountId();
             }
             
             firstClient.TopOpMoney(1000, firstClientAccountId);
             _centralBank.MakeMoneyTransfer(300, firstClient, secondClient, firstClientAccountId, secondClientAccountId);
-            
-            DebitAccount firstClientAccount = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
-            {
-                firstClientAccount = o;
-            }
 
-            if (firstClientAccount != null) Assert.AreEqual(700, firstClientAccount.MoneyCount);
+            double moneyAmountFirstClient = 0;
+            foreach (IAccount o in firstClient.Accounts)
+            {
+                moneyAmountFirstClient = o.GetMoneyAmount();
+            }
+            
+            Assert.AreEqual(700, moneyAmountFirstClient);
         }
         
         [Test]
         public void CancelTransactionTest()
         {
             string bankName = "Tinkoff Bank";
-
+        
             const int moneyTopUp = 1000;
             _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
@@ -187,62 +163,59 @@ namespace Banks.Tests
             BankClient secondClient = _centralBank.CreateClient("+79218653232", "Name",
                 "Surname", "4016 571555", bankName);
             secondClient.CreateDebitAccount(new DebitAccount(secondClient));
-
+        
             string firstClientAccountId = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            foreach (IAccount o in firstClient.Accounts)
             {
-                firstClientAccountId = o.AccountId;
+                firstClientAccountId = o.GetAccountId();
             }
             
             string secondClientAccountId = null;
-            foreach (DebitAccount o in secondClient.DebitAccounts)
+            foreach (IAccount o in secondClient.Accounts)
             {
-                secondClientAccountId = o.AccountId;
+                secondClientAccountId = o.GetAccountId();
             }
             
             firstClient.TopOpMoney(moneyTopUp, firstClientAccountId);
             _centralBank.MakeMoneyTransfer(300, firstClient, secondClient, firstClientAccountId, secondClientAccountId);
             
-            DebitAccount firstClientAccount = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            _centralBank.CancelLastOperation(firstClient);
+        
+            double moneyAmountFirstClient = 0;
+            foreach (IAccount o in firstClient.Accounts)
             {
-                firstClientAccount = o;
+                moneyAmountFirstClient = o.GetMoneyAmount();
             }
             
-            _centralBank.CancelLastOperation(firstClient);
-
-            if (firstClientAccount != null) Assert.AreEqual(moneyTopUp, firstClientAccount.MoneyCount);
+            Assert.AreEqual(moneyTopUp, moneyAmountFirstClient);
         }
-
+        
         [Test]
         public void SkipOneMonthTest()
         {
             string bankName = "Tinkoff Bank";
-
+        
             _centralBank.CreateBank("Tinkoff Bank");
             BankClient firstClient = _centralBank.CreateClient("+79218653265", "Egor",
                 "Guskov", "4016 571549", bankName);
             firstClient.CreateDebitAccount(new DebitAccount(firstClient));
-
+        
             string accountId = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            double moneyAmount = 0;
+            foreach (IAccount o in firstClient.Accounts)
             {
-                accountId = o.AccountId;
+                accountId = o.GetAccountId();
             }
             
             firstClient.TopOpMoney(100, accountId);
-
-            DebitAccount account = null;
-            foreach (DebitAccount o in firstClient.DebitAccounts)
+            
+            foreach (IAccount o in firstClient.Accounts)
             {
-                account = o;
+                o.SkipMonth(); // +1 % to money amount
+                moneyAmount = o.GetMoneyAmount();
             }
-
-            if (account != null)
-            {
-                account.SkipMonth(); // +1 % to money amount
-                Assert.AreEqual(101, account.MoneyCount);
-            }
+            
+            Assert.AreEqual(101, moneyAmount);
         }
     }
 }

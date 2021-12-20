@@ -48,9 +48,7 @@ namespace Banks.Builder
 
         public void CreateAccountsListAddBank(Bank bank)
         {
-            _client.DepositAccounts = new List<DepositAccount>();
-            _client.DebitAccounts = new List<DebitAccount>();
-            _client.CreditAccounts = new List<CreditAccount>();
+            _client.Accounts = new List<IAccount>();
             _client.ClientsBank = bank;
         }
 

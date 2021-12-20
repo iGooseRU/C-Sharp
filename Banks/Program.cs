@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Banks.Account;
-using Banks.Builder;
 using Banks.Entities;
 using Banks.Tools;
 
@@ -91,7 +91,11 @@ namespace Banks
                         {
                             if (bankAns == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -123,7 +127,11 @@ namespace Banks
                         {
                             if (bankAns1 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -153,7 +161,11 @@ namespace Banks
                         {
                             if (bankAns2 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -185,7 +197,11 @@ namespace Banks
                         {
                             if (bankAnsa == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -212,9 +228,9 @@ namespace Banks
                                         throw new BanksException("Can not to top up money. Try later.");
 
                                     case AccountTypeFlag.Credit:
-                                        foreach (var m in o.CreditAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accTopUp == m.AccountId)
+                                            if (accTopUp == m.GetAccountId())
                                             {
                                                 m.TopUpMoney(moneyAmount);
                                             }
@@ -227,9 +243,9 @@ namespace Banks
                                         break;
 
                                     case AccountTypeFlag.Debit:
-                                        foreach (var m in o.DebitAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accTopUp == m.AccountId)
+                                            if (accTopUp == m.GetAccountId())
                                             {
                                                 m.TopUpMoney(moneyAmount);
                                             }
@@ -242,9 +258,9 @@ namespace Banks
                                         break;
 
                                     case AccountTypeFlag.Deposit:
-                                        foreach (var m in o.DepositAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accTopUp == m.AccountId)
+                                            if (accTopUp == m.GetAccountId())
                                             {
                                                 m.TopUpMoney(moneyAmount);
                                             }
@@ -274,7 +290,11 @@ namespace Banks
                         {
                             if (bankAnsp == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -301,9 +321,9 @@ namespace Banks
                                         throw new BanksException("Can not to withdraw money. Try later.");
 
                                     case AccountTypeFlag.Credit:
-                                        foreach (var m in o.CreditAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accWithdraw == m.AccountId)
+                                            if (accWithdraw == m.GetAccountId())
                                             {
                                                 o.WithdrawMoney(moneyAmount, accWithdraw);
                                             }
@@ -316,9 +336,9 @@ namespace Banks
                                         break;
 
                                     case AccountTypeFlag.Debit:
-                                        foreach (var m in o.DebitAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accWithdraw == m.AccountId)
+                                            if (accWithdraw == m.GetAccountId())
                                             {
                                                 m.MoneyWithdraw(moneyAmount);
                                             }
@@ -331,9 +351,9 @@ namespace Banks
                                         break;
 
                                     case AccountTypeFlag.Deposit:
-                                        foreach (var m in o.DepositAccounts)
+                                        foreach (var m in o.Accounts)
                                         {
-                                            if (accWithdraw == m.AccountId)
+                                            if (accWithdraw == m.GetAccountId())
                                             {
                                                 m.MoneyWithdraw(moneyAmount);
                                             }
@@ -376,7 +396,11 @@ namespace Banks
                         {
                             if (bankAnsTransfer == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -393,7 +417,7 @@ namespace Banks
                                 Console.WriteLine("Deposit");
                                 Console.Write("Your answer:");
                                 string choose = Console.ReadLine();
-                                var type = o.AccountTypeHandler(choose);
+                                AccountTypeFlag type = o.AccountTypeHandler(choose);
 
                                 switch (type)
                                 {
@@ -403,21 +427,21 @@ namespace Banks
                                         throw new BanksException("Can not to get accounts. Try later.");
                                     case AccountTypeFlag.Credit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListCreditAccounts(o);
+                                        o.GetListCreditAccounts();
                                         Console.Write("Your answer: ");
                                         sendId = Console.ReadLine();
                                         break;
 
                                     case AccountTypeFlag.Debit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListDebitAccounts(o);
+                                        o.GetListDebitAccounts();
                                         Console.Write("Your answer: ");
                                         sendId = Console.ReadLine();
                                         break;
 
                                     case AccountTypeFlag.Deposit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListDepositAccounts(o);
+                                        o.GetListDepositAccounts();
                                         Console.Write("Your answer: ");
                                         sendId = Console.ReadLine();
                                         break;
@@ -438,7 +462,11 @@ namespace Banks
                         {
                             if (bankAnsTransfer1 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -465,21 +493,21 @@ namespace Banks
                                         throw new BanksException("Can not to get accounts. Try later.");
                                     case AccountTypeFlag.Credit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListCreditAccounts(o);
+                                        o.GetListCreditAccounts();
                                         Console.Write("Your answer: ");
                                         receiveId = Console.ReadLine();
                                         break;
 
                                     case AccountTypeFlag.Debit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListDebitAccounts(o);
+                                        o.GetListDebitAccounts();
                                         Console.Write("Your answer: ");
                                         receiveId = Console.ReadLine();
                                         break;
 
                                     case AccountTypeFlag.Deposit:
                                         Console.WriteLine("Choose account:");
-                                        o.GetListDepositAccounts(o);
+                                        o.GetListDepositAccounts();
                                         Console.Write("Your answer: ");
                                         receiveId = Console.ReadLine();
                                         break;
@@ -504,7 +532,11 @@ namespace Banks
                         {
                             if (bankAnsCancelOperation == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -536,7 +568,11 @@ namespace Banks
                         {
                             if (bankAns3 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -548,13 +584,13 @@ namespace Banks
                             if (ph3 == o.PhoneNumber)
                             {
                                 Console.WriteLine("Your credit accounts: ");
-                                o.GetListCreditAccounts(o);
+                                o.GetListCreditAccounts();
                                 Console.Write("Enter account id: ");
                                 string a = Console.ReadLine();
 
-                                foreach (var cr in o.CreditAccounts)
+                                foreach (var cr in o.Accounts)
                                 {
-                                    if (a == cr.AccountId)
+                                    if (a == cr.GetAccountId())
                                     {
                                         cr.SkipMonth();
                                         Console.WriteLine("You have successfully skipped one month");
@@ -578,7 +614,11 @@ namespace Banks
                         {
                             if (bankAns4 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -590,13 +630,13 @@ namespace Banks
                             if (ph4 == o.PhoneNumber)
                             {
                                 Console.WriteLine("Your debit accounts: ");
-                                o.GetListDebitAccounts(o);
+                                o.GetListDebitAccounts();
                                 Console.Write("Enter account id: ");
                                 string a = Console.ReadLine();
 
-                                foreach (var cr in o.DebitAccounts)
+                                foreach (var cr in o.Accounts)
                                 {
-                                    if (a == cr.AccountId)
+                                    if (a == cr.GetAccountId())
                                     {
                                         cr.SkipMonth();
                                         Console.WriteLine("You have successfully skipped one month");
@@ -620,7 +660,11 @@ namespace Banks
                         {
                             if (bankAns5 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 
@@ -632,13 +676,13 @@ namespace Banks
                             if (ph5 == o.PhoneNumber)
                             {
                                 Console.WriteLine("Your deposit accounts: ");
-                                o.GetListDepositAccounts(o);
+                                o.GetListDepositAccounts();
                                 Console.Write("Enter account id: ");
                                 string a = Console.ReadLine();
 
-                                foreach (var cr in o.DepositAccounts)
+                                foreach (var cr in o.Accounts)
                                 {
-                                    if (a == cr.AccountId)
+                                    if (a == cr.GetAccountId())
                                     {
                                         cr.SkipMonth();
                                         Console.WriteLine("You have successfully skipped one month");
@@ -666,7 +710,11 @@ namespace Banks
                         {
                             if (bankAns6 == o.BankName)
                             {
-                                o.GetClientsList();
+                                List<BankClient> clients = o.GetClientsList();
+                                foreach (var j in clients)
+                                {
+                                    Console.WriteLine("Surname: " + j.SecondName + ' ' + "Phone number: " + j.PhoneNumber);
+                                }
                             }
                         }
 

@@ -16,174 +16,85 @@ namespace Banks.Entities
         public string PassportNumber { get; set; }
         public Bank ClientsBank { get; set; }
         public bool AccountStatus { get; set; } // if 0 => questionable
-        public List<DebitAccount> DebitAccounts { get; set; }
-        public List<DepositAccount> DepositAccounts { get; set; }
-        public List<CreditAccount> CreditAccounts { get; set; }
+        public List<IAccount> Accounts { get; set; }
         public Transaction LastOperation { get; set; }
 
         public void CreateDebitAccount(IAccount account)
         {
-            account.CreateAccount();
-
-            DepositAccount acc = null;
-            foreach (DepositAccount o in DepositAccounts)
-            {
-                acc = o;
-            }
-
-            if (DebitAccountsCountNotNull())
-            {
-                Console.WriteLine("Debit account has been created successfully!");
-            }
+            AddDebitAccount(account);
         }
 
         public void CreateDepositAccount(IAccount account, DateTime depositTerm)
         {
-            account.CreateAccount();
-
-            DepositAccount acc = null;
-            foreach (DepositAccount o in DepositAccounts)
-            {
-                acc = o;
-            }
-
-            acc.DepositTerm = depositTerm;
-
-            if (DepositAccountsCountNotNull())
-            {
-                Console.WriteLine("Deposit account has been created successfully!");
-            }
+            AddDepositAccount(account);
         }
 
         public void CreateCreditAccount(IAccount account, int creditLimit)
         {
-            account.CreateAccount();
-
-            CreditAccount acc = null;
-            foreach (CreditAccount o in CreditAccounts)
-            {
-                acc = o;
-            }
-
-            if (acc != null)
-                acc.CreditLimit = -creditLimit;
-
-            if (CreditAccountsCountNotNull())
-            {
-                Console.WriteLine("Credit account has been created successfully!");
-            }
+            AddCreditAccount(account);
         }
 
         public void TopOpMoney(double moneyAmount, string accountId)
         {
-            AccountTypeFlag type = AccountTypeHandler(accountId);
-
-            switch (type)
+            foreach (var o in Accounts)
             {
-                default:
-                    throw new BanksException("Can not to make operation");
-
-                case AccountTypeFlag.Unknown:
-                    throw new BanksException("Invalid account prefix name");
-
-                case AccountTypeFlag.Credit:
-                    foreach (CreditAccount o in CreditAccounts)
-                    {
-                        if (accountId == o.AccountId)
-                            o.TopUpMoney(moneyAmount);
-                    }
-
-                    break;
-
-                case AccountTypeFlag.Deposit:
-                    foreach (DepositAccount o in DepositAccounts)
-                    {
-                        if (accountId == o.AccountId)
-                            o.TopUpMoney(moneyAmount);
-                    }
-
-                    break;
-
-                case AccountTypeFlag.Debit:
-                    foreach (DebitAccount o in DebitAccounts)
-                    {
-                        if (accountId == o.AccountId)
-                            o.TopUpMoney(moneyAmount);
-                    }
-
-                    break;
+                if (accountId == o.GetAccountId())
+                {
+                    o.TopUpMoney(moneyAmount);
+                }
             }
         }
 
         public void WithdrawMoney(int moneyAmount, string accountId)
         {
-            AccountTypeFlag type = AccountTypeHandler(accountId);
-
-            switch (type)
+            foreach (var o in Accounts)
             {
-                default:
-                    throw new BanksException("Can not to make operation");
-
-                case AccountTypeFlag.Unknown:
-                    throw new BanksException("Invalid account prefix name");
-
-                case AccountTypeFlag.Credit:
-                    throw new BanksException("You can not to withdraw money from credit account");
-
-                case AccountTypeFlag.Deposit:
-                    foreach (DepositAccount o in DepositAccounts)
-                    {
-                        if (accountId == o.AccountId)
-                            o.MoneyWithdraw(moneyAmount);
-                    }
-
-                    break;
-
-                case AccountTypeFlag.Debit:
-                    foreach (DebitAccount o in DebitAccounts)
-                    {
-                        if (accountId == o.AccountId)
-                            o.MoneyWithdraw(moneyAmount);
-                    }
-
-                    break;
+                if (accountId == o.GetAccountId())
+                    o.MoneyWithdraw(moneyAmount);
             }
         }
 
-        public void GetListCreditAccounts(BankClient client)
+        public void GetListCreditAccounts()
         {
             Console.WriteLine();
-            Console.WriteLine("CreditAccounts:");
-            foreach (CreditAccount o in client.CreditAccounts)
+            Console.WriteLine();
+            foreach (var o in Accounts)
             {
-                Console.WriteLine("AccountId:" + o.AccountId);
-                Console.WriteLine("Money amount:" + o.MoneyCount);
+                Console.WriteLine("____Credit accounts:____");
+                string id = string.Empty;
+                id = o.GetAccountId();
+                if (id[2] == 'E')
+                    o.GetAccountInfo();
             }
 
             Console.WriteLine();
         }
 
-        public void GetListDebitAccounts(BankClient client)
+        public void GetListDebitAccounts()
         {
             Console.WriteLine();
-            Console.WriteLine("DebitAccounts:");
-            foreach (DebitAccount o in client.DebitAccounts)
+            foreach (var o in Accounts)
             {
-                Console.WriteLine("AccountId:" + o.AccountId);
-                Console.WriteLine("Money amount:" + o.MoneyCount);
+                Console.WriteLine("____Debit accounts:____");
+                string id = string.Empty;
+                id = o.GetAccountId();
+                if (id[2] == 'B')
+                    o.GetAccountInfo();
             }
 
             Console.WriteLine();
         }
 
-        public void GetListDepositAccounts(BankClient client)
+        public void GetListDepositAccounts()
         {
             Console.WriteLine();
-            Console.WriteLine("DepositAccounts:");
-            foreach (DepositAccount o in client.DepositAccounts)
+            foreach (var o in Accounts)
             {
-                Console.WriteLine("AccountId:" + o.AccountId);
-                Console.WriteLine("Money amount:" + o.MoneyCount);
+                Console.WriteLine("____Deposit accounts:____");
+                string id = string.Empty;
+                id = o.GetAccountId();
+                if (id[2] == 'P')
+                    o.GetAccountInfo();
             }
 
             Console.WriteLine();
@@ -192,9 +103,9 @@ namespace Banks.Entities
         public void GetListOfAccounts(BankClient client)
         {
             Console.WriteLine("__________AccountsInfo__________");
-            GetListCreditAccounts(client);
-            GetListDebitAccounts(client);
-            GetListDepositAccounts(client);
+            GetListCreditAccounts();
+            GetListDebitAccounts();
+            GetListDepositAccounts();
         }
 
         public void GetClientsInfo(BankClient client)
@@ -232,19 +143,19 @@ namespace Banks.Entities
             return AccountTypeFlag.Unknown;
         }
 
-        private bool CreditAccountsCountNotNull()
+        public void AddCreditAccount(IAccount account)
         {
-            return CreditAccounts.Count != 0;
+            Accounts.Add(account);
         }
 
-        private bool DepositAccountsCountNotNull()
+        public void AddDebitAccount(IAccount account)
         {
-            return DepositAccounts.Count != 0;
+            Accounts.Add(account);
         }
 
-        private bool DebitAccountsCountNotNull()
+        public void AddDepositAccount(IAccount account)
         {
-            return DebitAccounts.Count != 0;
+            Accounts.Add(account);
         }
     }
 }

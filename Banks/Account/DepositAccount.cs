@@ -14,7 +14,7 @@ namespace Banks.Account
             ClientsBank = client.ClientsBank;
             AccountType = AccountTypeFlag.Deposit;
 
-            var cnt = new Counter();
+            var cnt = Counter.Source;
             AccountId = cnt.GetId(AccountType);
 
             WithdrawAvailable = false;
@@ -22,7 +22,7 @@ namespace Banks.Account
             CurrentMonth = DateTime.Now.Month;
         }
 
-        public string AccountId { get; set; }
+        public string AccountId { get; }
         public bool WithdrawAvailable { get; set; }
         public BankClient Client { get; }
         public double MoneyCount { get; set; }
@@ -31,10 +31,19 @@ namespace Banks.Account
         public DateTime DepositTerm { get; set; }
         public int CurrentMonth { get; set; }
 
-        public void CreateAccount()
+        public DepositAccount GetThisAccount()
         {
-            Client.DepositAccounts.Add(this);
-            Client.ClientsBank.DepositAccounts.Add(this);
+            return this;
+        }
+
+        public double GetMoneyAmount()
+        {
+            return MoneyCount;
+        }
+
+        public bool GetAccountStatus()
+        {
+            return WithdrawAvailable;
         }
 
         public void TopUpMoney(double moneyAmount)
@@ -54,6 +63,16 @@ namespace Banks.Account
                     throw new BanksException("Not enough money");
 
             MoneyCount -= moneyAmount;
+        }
+
+        public string GetAccountId()
+        {
+            return AccountId;
+        }
+
+        public void GetAccountInfo()
+        {
+            Console.WriteLine("Account Id: " + AccountId + ' ' + "Money amount: " + MoneyCount);
         }
 
         public void SkipMonth()

@@ -14,7 +14,7 @@ namespace Banks.Account
             ClientsBank = client.ClientsBank;
             AccountType = AccountTypeFlag.Credit;
 
-            var cnt = new Counter();
+            var cnt = Counter.Source;
             AccountId = cnt.GetId(AccountType);
 
             WithdrawAvailable = false;
@@ -23,7 +23,7 @@ namespace Banks.Account
             CurrentMonth = DateTime.Now.Month;
         }
 
-        public string AccountId { get; set; }
+        public string AccountId { get; }
         public bool WithdrawAvailable { get; }
         public BankClient Client { get; }
         public double MoneyCount { get; set; }
@@ -31,6 +31,21 @@ namespace Banks.Account
         public Bank ClientsBank { get; }
         public int CreditLimit { get; set; }
         public int CurrentMonth { get; set; }
+
+        public CreditAccount GetThisAccount()
+        {
+            return this;
+        }
+
+        public double GetMoneyAmount()
+        {
+            return MoneyCount;
+        }
+
+        public bool GetAccountStatus()
+        {
+            return WithdrawAvailable;
+        }
 
         public void TopUpMoney(double moneyAmount)
         {
@@ -40,16 +55,25 @@ namespace Banks.Account
             MoneyCount += moneyAmount;
         }
 
-        public void CreateAccount()
+        public void MoneyWithdraw(int moneyAmount)
         {
-            Client.CreditAccounts.Add(this);
-            Client.ClientsBank.CreditAccounts.Add(this);
+            throw new BanksException("You can't withdraw money from credit account!");
         }
 
         public void SkipMonth()
         {
             ++CurrentMonth;
             PercentHandler();
+        }
+
+        public string GetAccountId()
+        {
+            return AccountId;
+        }
+
+        public void GetAccountInfo()
+        {
+            Console.WriteLine("Account Id: " + AccountId + ' ' + "Money amount: " + MoneyCount);
         }
 
         public void PercentHandler()

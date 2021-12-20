@@ -24,29 +24,23 @@ namespace Banks.Entities
             CreditPercentage = CreditPerc;
             DepositPercentage = DepositPerc;
 
-            LicenseNum = GenerateLicenseNum();
             Clients = new List<BankClient>();
-            DebitAccounts = new List<DebitAccount>();
-            DepositAccounts = new List<DepositAccount>();
-            CreditAccounts = new List<CreditAccount>();
+            Accounts = new List<IAccount>();
         }
 
         public string BankName { get; }
-        public int LicenseNum { get; }
         public List<BankClient> Clients { get; }
         public List<DebitAccount> DebitAccounts { get; set; }
         public List<DepositAccount> DepositAccounts { get; set; }
         public List<CreditAccount> CreditAccounts { get; set; }
+        public List<IAccount> Accounts { get; set; }
         public double PercentageOnBalance { get; set; }
         public double CreditPercentage { get; set; }
         public double DepositPercentage { get; set; }
 
-        public void GetClientsList()
+        public List<BankClient> GetClientsList()
         {
-            foreach (var client in Clients)
-            {
-                Console.WriteLine("Surname: " + client.SecondName + ' ' + "Phone number: " + client.PhoneNumber);
-            }
+            return Clients;
         }
 
         public void AddClient(BankClient client)
@@ -54,12 +48,9 @@ namespace Banks.Entities
             Clients.Add(client);
         }
 
-        private static int GenerateLicenseNum()
+        public void AddAccount(IAccount account)
         {
-            var cnt = new Random();
-            int value = cnt.Next(100000, 999999);
-
-            return value;
+            Accounts.Add(account);
         }
     }
 }

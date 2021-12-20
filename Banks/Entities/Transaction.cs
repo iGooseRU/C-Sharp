@@ -38,13 +38,13 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            DebitAccount account = o.DebitAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            if (account.MoneyCount - MoneyAmount > 0)
+                            if (account.GetMoneyAmount() - MoneyAmount > 0)
                             {
-                                account.MoneyCount -= MoneyAmount;
+                                account.MoneyWithdraw(MoneyAmount);
                                 o.LastOperation = this;
                             }
                             else
@@ -58,11 +58,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == RecieveClient.PhoneNumber)
                         {
-                            DebitAccount account = o.DebitAccounts.Find(m => m.AccountId == RecieveAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == RecieveAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find receive account");
 
-                            account.MoneyCount += MoneyAmount;
+                            account.TopUpMoney(MoneyAmount);
                         }
                     }
 
@@ -73,15 +73,15 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            DepositAccount account = o.DepositAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            if (account.WithdrawAvailable)
+                            if (account.GetAccountStatus())
                             {
-                                if (account.MoneyCount - MoneyAmount > 0)
+                                if (account.GetMoneyAmount() - MoneyAmount > 0)
                                 {
-                                    account.MoneyCount -= MoneyAmount;
+                                    account.MoneyWithdraw(MoneyAmount);
                                     o.LastOperation = this;
                                 }
                                 else
@@ -101,11 +101,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == RecieveClient.PhoneNumber)
                         {
-                            DepositAccount account = o.DepositAccounts.Find(m => m.AccountId == RecieveAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == RecieveAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find receive account");
 
-                            account.MoneyCount += MoneyAmount;
+                            account.TopUpMoney(MoneyAmount);
                         }
                     }
 
@@ -116,31 +116,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            CreditAccount account = o.CreditAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            if (account.MoneyCount - MoneyAmount > account.CreditLimit)
-                            {
-                                account.MoneyCount -= MoneyAmount;
-                                o.LastOperation = this;
-                            }
-                            else
-                            {
-                                throw new BanksException("You have been reached your credit limit. Operation canceled");
-                            }
-                        }
-                    }
-
-                    foreach (BankClient o in CentralBank.AllClients)
-                    {
-                        if (o.PhoneNumber == RecieveClient.PhoneNumber)
-                        {
-                            CreditAccount account = o.CreditAccounts.Find(m => m.AccountId == RecieveAccountId);
-                            if (account == null)
-                                throw new BanksException("Can not to find receive account");
-
-                            account.MoneyCount += MoneyAmount;
+                            account.MoneyWithdraw(MoneyAmount);
                         }
                     }
 
@@ -164,11 +144,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            DebitAccount account = o.DebitAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            account.MoneyCount += MoneyAmount;
+                            account.TopUpMoney(MoneyAmount);
                         }
                     }
 
@@ -176,11 +156,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == RecieveClient.PhoneNumber)
                         {
-                            DebitAccount account = o.DebitAccounts.Find(m => m.AccountId == RecieveAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == RecieveAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find receive account");
 
-                            account.MoneyCount -= MoneyAmount;
+                            account.MoneyWithdraw(MoneyAmount);
                         }
                     }
 
@@ -191,11 +171,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            DepositAccount account = o.DepositAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            account.MoneyCount += MoneyAmount;
+                            account.TopUpMoney(MoneyAmount);
                         }
                     }
 
@@ -203,11 +183,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == RecieveClient.PhoneNumber)
                         {
-                            DepositAccount account = o.DepositAccounts.Find(m => m.AccountId == RecieveAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == RecieveAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find receive account");
 
-                            account.MoneyCount -= MoneyAmount;
+                            account.MoneyWithdraw(MoneyAmount);
                         }
                     }
 
@@ -218,11 +198,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == SendClient.PhoneNumber)
                         {
-                            CreditAccount account = o.CreditAccounts.Find(m => m.AccountId == SendAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == SendAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find send account");
 
-                            account.MoneyCount += MoneyAmount;
+                            account.TopUpMoney(MoneyAmount);
                         }
                     }
 
@@ -230,11 +210,11 @@ namespace Banks.Entities
                     {
                         if (o.PhoneNumber == RecieveClient.PhoneNumber)
                         {
-                            CreditAccount account = o.CreditAccounts.Find(m => m.AccountId == RecieveAccountId);
+                            var account = o.Accounts.Find(m => m.GetAccountId() == RecieveAccountId);
                             if (account == null)
                                 throw new BanksException("Can not to find receive account");
 
-                            account.MoneyCount -= MoneyAmount;
+                            account.MoneyWithdraw(MoneyAmount);
                         }
                     }
 

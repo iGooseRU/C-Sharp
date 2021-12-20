@@ -1,4 +1,4 @@
-﻿using Banks.Entities;
+﻿using System;
 
 namespace Banks.Account
 {
@@ -11,6 +11,23 @@ namespace Banks.Account
         private static int creditId = 100000;
         private static int depositId = 100000;
         private static int debitId = 100000;
+
+        private static Counter source = null;
+
+        private Counter()
+        {
+        }
+
+        public static Counter Source
+        {
+            get
+            {
+                if (source == null)
+                    source = new Counter();
+
+                return source;
+            }
+        }
 
         public string GetId(AccountTypeFlag accountType)
         {

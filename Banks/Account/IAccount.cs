@@ -4,6 +4,12 @@ namespace Banks.Account
 {
     public interface IAccount
     {
-        public void CreateAccount();
+        void TopUpMoney(double moneyAmount);
+        void MoneyWithdraw(int moneyAmount);
+        string GetAccountId();
+        double GetMoneyAmount();
+        bool GetAccountStatus();
+        void GetAccountInfo();
+        void SkipMonth();
     }
 }
