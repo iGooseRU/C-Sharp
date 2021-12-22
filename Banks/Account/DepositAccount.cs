@@ -31,6 +31,32 @@ namespace Banks.Account
         public DateTime DepositTerm { get; set; }
         public int CurrentMonth { get; set; }
 
+        public void MakeOperation(int moneyAmount, BankClient recieveClient, string recieveAccountId)
+        {
+            if (GetAccountStatus())
+            {
+                MoneyWithdraw(moneyAmount);
+                foreach (var o in recieveClient.Accounts)
+                {
+                    if (recieveAccountId == o.GetAccountId())
+                    {
+                        o.TopUpMoney(moneyAmount);
+                        Client.LastOperation = new LastOperation(moneyAmount, Client, recieveClient, AccountId, recieveAccountId);
+                    }
+                }
+            }
+            else
+            {
+                throw new BanksException("Your deposit term haven't ended yet");
+            }
+        }
+
+        public void CancelOperation()
+        {
+            int returnMoneyAmount = Client.LastOperation.MoneyAmount;
+            TopUpMoney(returnMoneyAmount);
+        }
+
         public DepositAccount GetThisAccount()
         {
             return this;
@@ -70,8 +96,9 @@ namespace Banks.Account
             return AccountId;
         }
 
-        public void GetAccountInfo()
+        public void PrintAccountInfo()
         {
+            Console.WriteLine("____Deposit accounts:____");
             Console.WriteLine("Account Id: " + AccountId + ' ' + "Money amount: " + MoneyCount);
         }
 

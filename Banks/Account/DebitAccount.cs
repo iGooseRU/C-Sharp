@@ -30,6 +30,26 @@ namespace Banks.Account
         public Bank ClientsBank { get; }
         public int CurrentMonth { get; set; }
 
+        public void MakeOperation(int moneyAmount, BankClient recieveClient, string recieveAccountId)
+        {
+            MoneyWithdraw(moneyAmount);
+            foreach (var o in recieveClient.Accounts)
+            {
+                if (recieveAccountId == o.GetAccountId())
+                {
+                    o.TopUpMoney(moneyAmount);
+                }
+
+                Client.LastOperation = new LastOperation(moneyAmount, Client, recieveClient, AccountId, recieveAccountId);
+            }
+        }
+
+        public void CancelOperation()
+        {
+            int returnMoneyAmount = Client.LastOperation.MoneyAmount;
+            TopUpMoney(returnMoneyAmount);
+        }
+
         public DebitAccount GetThisAccount()
         {
             return this;
@@ -63,8 +83,9 @@ namespace Banks.Account
             return AccountId;
         }
 
-        public void GetAccountInfo()
+        public void PrintAccountInfo()
         {
+            Console.WriteLine("____Debit accounts:____");
             Console.WriteLine("Account Id: " + AccountId + ' ' + "Money amount: " + MoneyCount);
         }
 

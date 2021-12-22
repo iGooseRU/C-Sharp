@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 using Banks.Entities;
 using Banks.Tools;
 
@@ -31,6 +32,16 @@ namespace Banks.Account
         public Bank ClientsBank { get; }
         public int CreditLimit { get; set; }
         public int CurrentMonth { get; set; }
+
+        public void MakeOperation(int moneyAmount, BankClient recieveClient, string sendAccountId)
+        {
+            MoneyWithdraw(moneyAmount);
+        }
+
+        public void CancelOperation()
+        {
+            throw new BanksException("Unavailable operation!");
+        }
 
         public CreditAccount GetThisAccount()
         {
@@ -71,8 +82,9 @@ namespace Banks.Account
             return AccountId;
         }
 
-        public void GetAccountInfo()
+        public void PrintAccountInfo()
         {
+            Console.WriteLine("____Credit accounts:____");
             Console.WriteLine("Account Id: " + AccountId + ' ' + "Money amount: " + MoneyCount);
         }
 
