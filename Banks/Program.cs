@@ -66,7 +66,13 @@ namespace Banks
 
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankName = Console.ReadLine();
 
@@ -82,7 +88,13 @@ namespace Banks
                         Console.WriteLine("Creating credit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns = Console.ReadLine();
                         Console.WriteLine();
@@ -118,7 +130,13 @@ namespace Banks
                         Console.WriteLine("Creating debit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns1 = Console.ReadLine();
                         Console.WriteLine();
@@ -152,7 +170,13 @@ namespace Banks
                         Console.WriteLine("Creating deposit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns2 = Console.ReadLine();
                         Console.WriteLine();
@@ -188,7 +212,13 @@ namespace Banks
                         Console.WriteLine("__________TOP UP MONEY MENU__________");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAnsa = Console.ReadLine();
                         Console.WriteLine();
@@ -281,7 +311,13 @@ namespace Banks
                         Console.WriteLine("__________WITHDRAW MONEY MENU__________");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAnsp = Console.ReadLine();
                         Console.WriteLine();
@@ -386,7 +422,13 @@ namespace Banks
                         Console.WriteLine("Enter send client: ");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         bankAnsTransfer = Console.ReadLine();
 
@@ -452,7 +494,13 @@ namespace Banks
                         Console.WriteLine("Enter receive client: ");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         bankAnsTransfer1 = Console.ReadLine();
 
@@ -523,7 +571,13 @@ namespace Banks
                         Console.WriteLine("__________CANCEL LAST OPERATION MENU__________");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAnsCancelOperation = Console.ReadLine();
                         Console.WriteLine();
@@ -547,7 +601,14 @@ namespace Banks
                         {
                             if (phNumCancelOperation == o.PhoneNumber)
                             {
-                                centralBank.CancelLastOperation(o);
+                                Console.Write("Choose account to cancel operation:");
+                                foreach (var acc in o.Accounts)
+                                {
+                                    Console.WriteLine(acc.GetAccountId());
+                                }
+
+                                string cancelAccount = Console.ReadLine();
+                                centralBank.CancelLastOperation(o, cancelAccount);
                                 Console.WriteLine("You have successfully canceled last operation!");
                                 Console.WriteLine(o.LastOperation.MoneyAmount + "returned to " + o.LastOperation.SendAccountId);
                             }
@@ -559,7 +620,13 @@ namespace Banks
                         Console.WriteLine("Skipping one month for credit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns3 = Console.ReadLine();
                         Console.WriteLine();
@@ -605,7 +672,13 @@ namespace Banks
                         Console.WriteLine("Skipping one month for debit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns4 = Console.ReadLine();
                         Console.WriteLine();
@@ -651,7 +724,13 @@ namespace Banks
                         Console.WriteLine("Skipping one month for deposit account...");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns5 = Console.ReadLine();
                         Console.WriteLine();
@@ -694,14 +773,26 @@ namespace Banks
                         break;
 
                     case "13":
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         break;
 
                     case "14":
                         Console.WriteLine("CLIENT'S INFORMATION:");
                         Console.WriteLine("Choose bank:");
                         Console.WriteLine("All available banks:");
-                        centralBank.GetListOfAllBanks();
+
+                        Console.WriteLine("__________LIST OF ALL BANKS__________");
+                        foreach (var bank in centralBank.Banks)
+                        {
+                            Console.WriteLine(bank.BankName);
+                        }
+
                         Console.Write("Enter bank:");
                         string bankAns6 = Console.ReadLine();
                         Console.WriteLine();
