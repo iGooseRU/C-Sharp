@@ -24,15 +24,6 @@ namespace Banks.Entities
             return bank;
         }
 
-        public void GetListOfAllBanks()
-        {
-            Console.WriteLine("__________LIST OF ALL BANKS__________");
-            foreach (var bank in Banks)
-            {
-                Console.WriteLine(bank.BankName);
-            }
-        }
-
         public BankClient CreateClient(string phoneNumber, string firstName, string secondName, string passportData, string bankName)
         {
             Bank bank = Banks.Find(m => m.BankName == bankName);
@@ -52,14 +43,24 @@ namespace Banks.Entities
 
         public void MakeMoneyTransfer(int moneyAmount, BankClient sendClient, BankClient receiveClient, string sendAccountId, string receiveAccountId)
         {
-            var transaction = new Transaction(this, moneyAmount, sendClient, receiveClient, sendAccountId, receiveAccountId);
-            transaction.MakeOperation();
+            foreach (var o in sendClient.Accounts)
+            {
+                if (o.GetAccountId() == sendAccountId)
+                {
+                    o.MakeOperation(moneyAmount, receiveClient, sendAccountId);
+                }
+            }
         }
 
-        public void CancelLastOperation(BankClient client)
+        public void CancelLastOperation(BankClient client, string accountId)
         {
-            Transaction transaction = client.LastOperation;
-            transaction.CancelOperation();
+            foreach (var o in client.Accounts)
+            {
+                if (o.GetAccountId() == accountId)
+                {
+                    o.CancelOperation();
+                }
+            }
         }
 
         public void AddClientToGlobalList(BankClient client)

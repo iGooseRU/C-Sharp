@@ -35,7 +35,6 @@ namespace Banks.Builder
         {
             if (passportData == "skip" || passportData == null)
             {
-                Console.WriteLine("Your account is questionable!");
                 _client.PassportNumber = null;
                 _client.AccountStatus = false;
             }

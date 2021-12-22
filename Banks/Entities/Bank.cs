@@ -30,9 +30,6 @@ namespace Banks.Entities
 
         public string BankName { get; }
         public List<BankClient> Clients { get; }
-        public List<DebitAccount> DebitAccounts { get; set; }
-        public List<DepositAccount> DepositAccounts { get; set; }
-        public List<CreditAccount> CreditAccounts { get; set; }
         public List<IAccount> Accounts { get; set; }
         public double PercentageOnBalance { get; set; }
         public double CreditPercentage { get; set; }

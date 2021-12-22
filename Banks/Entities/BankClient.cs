@@ -17,7 +17,7 @@ namespace Banks.Entities
         public Bank ClientsBank { get; set; }
         public bool AccountStatus { get; set; } // if 0 => questionable
         public List<IAccount> Accounts { get; set; }
-        public Transaction LastOperation { get; set; }
+        public LastOperation LastOperation { get; set; }
 
         public void CreateDebitAccount(IAccount account)
         {
@@ -56,48 +56,35 @@ namespace Banks.Entities
 
         public void GetListCreditAccounts()
         {
-            Console.WriteLine();
-            Console.WriteLine();
             foreach (var o in Accounts)
             {
-                Console.WriteLine("____Credit accounts:____");
                 string id = string.Empty;
                 id = o.GetAccountId();
                 if (id[2] == 'E')
-                    o.GetAccountInfo();
+                    o.PrintAccountInfo();
             }
-
-            Console.WriteLine();
         }
 
         public void GetListDebitAccounts()
         {
-            Console.WriteLine();
             foreach (var o in Accounts)
             {
-                Console.WriteLine("____Debit accounts:____");
                 string id = string.Empty;
                 id = o.GetAccountId();
                 if (id[2] == 'B')
-                    o.GetAccountInfo();
+                    o.PrintAccountInfo();
             }
-
-            Console.WriteLine();
         }
 
         public void GetListDepositAccounts()
         {
-            Console.WriteLine();
             foreach (var o in Accounts)
             {
-                Console.WriteLine("____Deposit accounts:____");
                 string id = string.Empty;
                 id = o.GetAccountId();
                 if (id[2] == 'P')
-                    o.GetAccountInfo();
+                    o.PrintAccountInfo();
             }
-
-            Console.WriteLine();
         }
 
         public void GetListOfAccounts(BankClient client)
@@ -108,7 +95,7 @@ namespace Banks.Entities
             GetListDepositAccounts();
         }
 
-        public void GetClientsInfo(BankClient client)
+        public void GetClientsInfo(BankClient client) // вынести
         {
             Console.WriteLine("__________INFORMATION ABOUT " + client.FirstName + ' ' + client.SecondName + "__________");
             Console.WriteLine("Name: " + FirstName);
