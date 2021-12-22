@@ -179,7 +179,7 @@ namespace Banks.Tests
             firstClient.TopOpMoney(moneyTopUp, firstClientAccountId);
             _centralBank.MakeMoneyTransfer(300, firstClient, secondClient, firstClientAccountId, secondClientAccountId);
             
-            _centralBank.CancelLastOperation(firstClient);
+            _centralBank.CancelLastOperation(firstClient, firstClientAccountId);
         
             double moneyAmountFirstClient = 0;
             foreach (IAccount o in firstClient.Accounts)
